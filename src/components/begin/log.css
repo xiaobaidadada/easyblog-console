@@ -1,0 +1,12 @@
+/*
+加上前缀是为了避免css作用域太大；
+*/
+
+.log_con{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
