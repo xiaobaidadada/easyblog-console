@@ -1,9 +1,9 @@
-import { useMediaQuery } from "@mui/material";//判断界面的大小
+// import { useMediaQuery } from "@mui/material";//判断界面的大小
 import './log.css';
-import Button from '@mui/material/Button';
-import { Login as log_in } from "@mui/icons-material";
-import TextField from '@mui/material/TextField';
-import Input from '@mui/material/Input';
+// import Button from '@mui/material/Button';
+// import { Login as log_in } from "@mui/icons-material";
+// import TextField from '@mui/material/TextField';
+// import Input from '@mui/material/Input';
 
 //登录组件
 
@@ -19,12 +19,12 @@ function Login() {
             <div>
                 <h1>Easy Blog</h1>
                 <div>
-                    <TextField id="standard-basic" label="账号" variant="standard"  />
+                    账号:<input />
                 </div>
                 <div>
-                    <TextField id="standard-basic" label="密码" variant="standard" type="password"  />
+                密码:<input />
                 </div>
-                <Button variant="contained"  style={style} >     登录    </Button>
+                <button style={style} >     登录    </button>
             </div>
 
         </div>

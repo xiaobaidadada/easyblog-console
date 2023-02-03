@@ -1,17 +1,16 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { browserHistory } from 'react-router'
-// const path = `/repos/${userName}/${repo}`
-//     browserHistory.push(path)
+
+
 function Main() {
+    // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
     return (
-        <div>
-            主页
-        </div>
-
+       <div>
+        ok
+       </div>
     );
 }
 
 export default Main;
+
 
