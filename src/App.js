@@ -6,7 +6,7 @@ import './App.css';
 // import Main from './components/main/main'
 // import { browserHistory } from 'react-router'
 import Loyout from './keycomponents/Layout'
-import { BrowserRouter, Routes, Route ,HashRouter} from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 // const path = `/repos/${userName}/${repo}`
 //     browserHistory.push(path)
 function App() {
@@ -20,8 +20,8 @@ function App() {
     //     </Route>
     //   </Routes>
     // </BrowserRouter>
-<BrowserRouter>
-<Loyout />
+    <BrowserRouter>
+      <Loyout />
     </BrowserRouter>
 
 

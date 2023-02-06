@@ -6,26 +6,8 @@ import RouteMain from './RouteMain'
 import { useNavigate } from 'react-router-dom';
 
 const { Header, Content, Sider } = Layout;
-// const items1 = ['1', '2', '3'].map((key) => ({
-//   key,
-//   label: `nav ${key}`,
-// }));
-// const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-//   const key = String(index + 1);
-//   return {
-//     key: `sub${key}`,
-//     icon: React.createElement(icon),
-//     label: `subnav ${key}`,
-//     children: new Array(4).fill(null).map((_, j) => {
-//       const subKey = index * 4 + j + 1;
-//       return {
-//         key: subKey,
-//         label: `option${subKey}`,
-//       };
-//     }),
-//   };
-// });
-const items1 = [
+
+const 顶部提示按钮 = [
   {
     label: '退出'
   },
@@ -33,7 +15,7 @@ const items1 = [
     label: '后台'
   }
 ]
-const items2 = [
+const 菜单 = [
   {
     key: 'essay',
     label: '文章管理'
@@ -58,7 +40,8 @@ const items2 = [
     label: '快速编辑'
   },
   {
-    label: '评论管理'
+    label: '评论管理',
+    key:'comment'
   },
   {
     key: 'file',
@@ -83,38 +66,35 @@ const Loyout = () => {
   function menuControl({ item, key, keyPath, domEvent }) {
     console.log(keyPath)
     rout = '';
-    // keyPath.map((path) => {
-    //   rout += path + '/';
-    // })
     keyPath.forEach(element => {
       rout = element + '/'+rout;
     });
 
-    navigate(rout)
+    navigate(rout)//路由跳转
   }
 
   return (
     <Layout>
-      {/* <--头部--> */}
+      {/* <--顶部--> */}
       <Header className="header" theme="light" style={{
         background: colorBgContainer,
         boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
         // position: 'fixed'
       }}>
         <div className="logo" />
-        <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
+        <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']} items={顶部提示按钮} />
         <div style={{
           display: 'inline-block'
         }}>退出</div>
       </Header>
 
-      {//中间
+      {//中部
       }
       <Layout>
         {//侧边栏
         }
         <Sider
-          width={200}
+          width={200}   
           style={{
             background: colorBgContainer,
           }}
@@ -127,7 +107,7 @@ const Loyout = () => {
               height: '100%',
               borderRight: 0,
             }}
-            items={items2} onClick={menuControl}
+            items={菜单} onClick={menuControl}
           />
         </Sider>
 

@@ -7,6 +7,8 @@ import Essay from '../components/essay/Essay'
 import Ace from '../components/Editor/AceEditor'
 import Css from '../components/plug/css'
 import Js from '../components/plug/Js'
+import Comment from '../components/comment/comment'
+import File from '../components/file/file'
 
 function RouteMain(props) {
 
@@ -24,6 +26,8 @@ function RouteMain(props) {
         <Route path='/eaitor' element={<Ace />} />
         <Route path='/plug/css' element={<Css />} />
         <Route path='/plug/js' element={<Js />} />
+        <Route path='/comment' element={<Comment />} />
+        <Route path='/file' element={<File />} />
       </Routes>
 
 
