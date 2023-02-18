@@ -4,6 +4,7 @@ import React from 'react';
 import './layout.css';
 import RouteMain from './RouteMain'
 import { useNavigate } from 'react-router-dom';
+import HeaderXB from '../components/header/HeaderXB'
 
 const { Header, Content, Sider } = Layout;
 
@@ -76,7 +77,8 @@ const Loyout = () => {
   return (
     <Layout>
       {/* <--顶部--> */}
-      <Header className="header" theme="light" style={{
+      <HeaderXB />
+      {/* <Header className="header" theme="light" style={{
         background: colorBgContainer,
         boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
         // position: 'fixed'
@@ -86,7 +88,7 @@ const Loyout = () => {
         <div style={{
           display: 'inline-block'
         }}>退出</div>
-      </Header>
+      </Header> */}
 
       {//中部
       }
