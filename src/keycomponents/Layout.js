@@ -64,6 +64,10 @@ const Loyout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  /**
+   * 菜单点击路由函数
+   * @param {*} param0 
+   */
   function menuControl({ item, key, keyPath, domEvent }) {
     console.log(keyPath)
     rout = '';
@@ -71,6 +75,9 @@ const Loyout = () => {
       rout = element + '/'+rout;
     });
 
+    if(rout=='file/'){
+      
+    }
     navigate(rout)//路由跳转
   }
 

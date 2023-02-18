@@ -29,10 +29,10 @@ function Update(yy) {
 
 /**
  * 直接点击编辑
- * @param {} yy 
+ * @param {}  
  * @returns 
  */
-function Add(yy) {
+function Add() {
     return (
         <div>
             <button>取消</button>
@@ -47,7 +47,7 @@ export default function HeaderXB(props) {
     return (
         <div id='header'>
               
-     <State />
+                <State />
         </div>
        
     );
