@@ -1,90 +1,98 @@
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import React from 'react';
-import './layout.css';
-import RouteMain from './RouteMain'
-import { useNavigate } from 'react-router-dom';
-import HeaderXB from '../components/header/HeaderXB'
+import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { Breadcrumb, Layout, Menu, theme, Button, Modal, Space } from "antd";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import RouteMain from "./RouteMain";
+import HeaderXB from "../components/header/HeaderXB";
+import "./layout.css";
 
 const { Header, Content, Sider } = Layout;
 
-const 顶部提示按钮 = [
+// export const nameContext = React.createContext("名nameContext");
+let routeName = ""; // 当前路由名
+// 顶部提示按钮
+const headerList = [
   {
-    label: '退出'
+    label: "退出",
   },
   {
-    label: '后台'
-  }
-]
-const 菜单 = [
-  {
-    key: 'essay',
-    label: '文章管理'
+    label: "后台",
   },
-
+];
+// 菜单
+export const menuList = [
   {
-    key: 'plug',
-    label: '插件管理',
-    children: [{
-      key: 'css',
-      label: 'CSS'
-    },
-    {
-      key: 'js',
-      label: 'JS'
-    }
-    ]
+    key: "essay",
+    label: "文章管理",
   },
 
   {
-    key: 'eaitor',
-    label: '快速编辑'
+    key: "plug",
+    label: "插件管理",
+    children: [
+      {
+        key: "css",
+        label: "CSS",
+      },
+      {
+        key: "js",
+        label: "JS",
+      },
+    ],
+  },
+
+  {
+    key: "eaitor",
+    label: "快速编辑",
   },
   {
-    label: '评论管理',
-    key:'comment'
+    label: "评论管理",
+    key: "comment",
   },
   {
-    key: 'file',
-    label: '文件'
+    key: "file",
+    label: "文件",
   },
   {
-    key: 'system',
-    label: '系统设置',
-    children: [{
-      key: 'function',
-      label: '账号'
-    }]
-  }
-]
+    key: "system",
+    label: "系统设置",
+    children: [
+      {
+        key: "function",
+        label: "账号",
+      },
+    ],
+  },
+];
 const Loyout = () => {
   const navigate = useNavigate();
-  var rout = '/'
+  var rout = "/";
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   /**
    * 菜单点击路由函数
-   * @param {*} param0 
+   * @param {*} param0
    */
   function menuControl({ item, key, keyPath, domEvent }) {
-    console.log(keyPath)
-    rout = '';
-    keyPath.forEach(element => {
-      rout = element + '/'+rout;
+    console.log(keyPath);
+    routeName = keyPath[0];
+    rout = "";
+    keyPath.forEach((element) => {
+      rout = element + "/" + rout;
     });
 
-    if(rout=='file/'){
-      
+    if (rout == "file/") {
     }
-    navigate(rout)//路由跳转
+    navigate(rout); //路由跳转
   }
 
   return (
     <Layout>
       {/* <--顶部--> */}
-      <HeaderXB />
+      <HeaderXB route={routeName} />
       {/* <Header className="header" theme="light" style={{
         background: colorBgContainer,
         boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
@@ -97,37 +105,40 @@ const Loyout = () => {
         }}>退出</div>
       </Header> */}
 
-      {//中部
+      {
+        //中部
       }
       <Layout>
-        {//侧边栏
+        {
+          //侧边栏
         }
         <Sider
-          width={200}   
+          width={200}
           style={{
             background: colorBgContainer,
           }}
         >
           <Menu
             mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
             style={{
-              height: '100%',
+              height: "100%",
               borderRight: 0,
             }}
-            items={菜单} onClick={menuControl}
+            items={menuList}
+            onClick={menuControl}
           />
         </Sider>
 
-        {//内容
+        {
+          //内容
         }
         <Layout
           style={{
-            padding: '0 24px 24px',
+            padding: "0 24px 24px",
           }}
         >
-
           <Content
             style={{
               marginTop: 30,
@@ -143,5 +154,6 @@ const Loyout = () => {
       </Layout>
     </Layout>
   );
+  
 };
 export default Loyout;

@@ -1,0 +1,57 @@
+.header {
+    height: 70px;
+    background-color: #ffffff;
+    padding: 0 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    .modal {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+
+        img {
+            width: 40px;
+        }
+    }
+    .title {
+        flex: 1;
+        padding-left: 8px;
+        font-weight: 550;
+        font-size: 18px;
+    }
+    button {
+        position: relative;
+        // padding: 8px 16px 10px 16px;
+        border: none;
+        border-radius: 2px;
+        box-shadow: none;
+        color: #595959;
+        background: none;
+        cursor: pointer;
+        &:hover {
+            background: rgba($color: #000000, $alpha: 0.03);
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            right: 0;
+            width: 1px;
+            height: 14px;
+            background-color: #ddd;
+        }
+        &.special {
+            &::after {
+                content: "";
+                width: 0;
+                height: 0;
+            }
+        }
+    }
+    .hover {
+        background: rgba($color: #000000, $alpha: 0.1);
+    }
+}

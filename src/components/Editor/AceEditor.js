@@ -35,7 +35,6 @@ export default class Ace extends React.Component {
         console.log('change', newValue);
         
     }
-
     render() {
         return (
             <div>
