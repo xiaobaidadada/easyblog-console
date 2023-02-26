@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Breadcrumb, Layout, Menu, theme, Button, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import styles from "./styles.module.scss";
+import styles from "./styles.module.css";
 import Logo from "../../assets/common/logo.png";
 import { menuList } from "../../keycomponents/Layout";
 // import { nameContext } from "../../keycomponents/Layout";
