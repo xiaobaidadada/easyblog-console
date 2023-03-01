@@ -1,0 +1,12 @@
+.serachSection {
+  display: flex;
+  justify-content: space-around;
+}
+
+.serachSection :global .ant-input {
+  width: 90px;
+}
+
+.serachSection :global .ant-picker-range {
+  width: 190px !important;
+}

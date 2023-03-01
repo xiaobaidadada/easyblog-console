@@ -1,0 +1,16 @@
+.serachSection {
+    display: flex;
+    justify-content: space-around;
+
+    :global {
+        // 覆盖的样式需要放到全局中
+        .ant-input {
+            // Ant Design 中的样式
+            width: 90px;
+            // width: 98%; // 需要覆盖的属性
+        }
+        .ant-picker-range {
+            width: 190px !important;
+        }
+    }
+}

@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Breadcrumb, Layout, Menu, theme, Button, Modal, Space } from "antd";
+import { Button, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import Logo from "../../assets/common/logo.png";
 import { menuList } from "../../keycomponents/Layout";
+import { HandleFetch } from "../../utils/fetch";
 // import { nameContext } from "../../keycomponents/Layout";
 
 // 弹窗Modal
@@ -51,8 +52,13 @@ function State(props) {
       content: "确定退出登录？",
       okText: "确定",
       cancelText: "取消",
-      onOk: (close) => {
+      onOk: async (close) => {
         console.log("退出");
+        const res = await HandleFetch("/rand.music", "GET", {
+          sort: "热歌榜",
+          mid: "862101001",
+          format: "json",
+        });
         return close();
       },
     });
@@ -122,7 +128,7 @@ const StateEditor = ({ msg }) => {
       <Button>保存为css插件</Button>
       <Button>保存为js插件</Button>
       <Button>保存为文章</Button>
-      {/* <LocalizedModal /> */}
+      <LocalizedModal />
     </div>
   );
 };
