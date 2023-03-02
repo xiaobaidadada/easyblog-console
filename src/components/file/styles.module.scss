@@ -1,0 +1,7 @@
+.file-wrapper {
+    display: inline;
+    & > div {
+        display: inline-block;
+        margin: 12px 20px;
+    }
+}
