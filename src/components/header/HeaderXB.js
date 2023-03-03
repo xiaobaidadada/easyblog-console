@@ -109,11 +109,10 @@ function Add({ msg }) {
 
 // 标题
 const Title = ({ title }) => {
-  const text = title ? title.label ?? "" : "个人博客管理系统";
   return (
     <div className={styles.modal}>
       <img src={Logo} alt="logo" />
-      <div className={styles.title}>{text}</div>
+      <div className={styles.title}>{title}</div>
     </div>
   );
 };
@@ -134,11 +133,12 @@ const StateEditor = ({ msg }) => {
 };
 
 export default function HeaderXB(props) {
-  const title = menuList.find((item) => item.key === props.route);
+  // const title = menuList.find((item) => item.key === props.route);
+  const title = '个人博客管理系统'
   return (
     <div id="header" className={styles.header}>
       {props.route !== "eaitor" && <Title title={title}></Title>}
-      {props.route === "eaitor" && <StateEditor msg="快速编辑" />}
+      {props.route === "eaitor" && <StateEditor msg={title+' - 快速编辑'} />}
       <State />
     </div>
   );
