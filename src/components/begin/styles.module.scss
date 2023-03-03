@@ -1,7 +1,20 @@
-.log{
+.login-wrapper{
     display: flex;
     height: 80%;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+
+    .btn-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+
+        :global {
+            .ant-btn-primary {
+                margin-top: 20px;
+                width: 120px;
+            }
+        }
+    }
 }
