@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import Login from "../components/begin/Login";
 import { Routes, Route } from "react-router-dom";
 import Main from "../components/main/main";
@@ -8,6 +8,7 @@ import Css from "../components/plug/css";
 import Js from "../components/plug/Js";
 import Comment from "../components/comment/comment";
 import File from "../components/file/file";
+import Setting from "../components/setting/Setting";
 
 function RouteMain(props) {
   return (
@@ -20,6 +21,7 @@ function RouteMain(props) {
       <Route path="/plug/js" key="/plug/js" element={<Js />} />
       <Route path="/comment" key="/comment" element={<Comment />} />
       <Route path="/file" key="/file" element={<File />} />
+      <Route path="/system/setting" key="/system/setting" element={<Setting />} />
     </Routes>
   );
 }
