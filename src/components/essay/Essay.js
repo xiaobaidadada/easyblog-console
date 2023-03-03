@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Descriptions, Divider, Form, Modal } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import { HandleFetch } from "../../utils/fetch";
 import CEditModal from "../editModal/CEditModal";
@@ -16,7 +16,12 @@ import {
   Tooltip,
   Space,
   Table,
+  Upload,
   Tag,
+  Descriptions,
+  Divider,
+  Form,
+  Modal,
 } from "antd";
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -233,6 +238,24 @@ function Essay() {
     setOpenImport(false);
   };
 
+  // 导入-上传
+  const uploadProps = {
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    onChange({ file, fileList }) {
+      if (file.status !== "uploading") {
+        console.log(file, fileList);
+      }
+    },
+    defaultFileList: [
+      // {
+      //   uid: "1",
+      //   name: "xxx.png",
+      //   status: "uploading",
+      //   url: "http://www.baidu.com/xxx.png",
+      //   percent: 33,
+      // },
+    ],
+  };
   // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   return (
     <div>
@@ -319,7 +342,11 @@ function Essay() {
         onCancel={hideModal}
         okText="确认"
         cancelText="取消"
-      ></Modal>
+      >
+        <Upload {...uploadProps}>
+          <Button icon={<UploadOutlined />}>Upload</Button>
+        </Upload>
+      </Modal>
 
       {contextHolder}
 
