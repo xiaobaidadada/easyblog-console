@@ -40,8 +40,8 @@ export async function HandleFetch(
   data = {},
   resType = "JSON"
 ) {
-  // const userToken = await AsyncStorage.getItem("userToken");
-  // const auth = userToken ? { Authorization: `Bearer ${userToken}` } : {};
+  const userToken = await AsyncStorage.getItem("EasyBlog_Token");
+  const auth = userToken ? { Authorization: `Bearer ${userToken}` } : {};
   method = method.toUpperCase();
   resType = method.toUpperCase();
 
@@ -51,7 +51,7 @@ export async function HandleFetch(
       Accept: "application/json",
       // "Content-Type": "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
-      // ...auth,
+      ...auth,
     },
     mode: "cors",
     cache: "default",

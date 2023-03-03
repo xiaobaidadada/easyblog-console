@@ -1,0 +1,22 @@
+.setting {
+  display: flex;
+  height: 80%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 40px auto;
+}
+
+.setting .info {
+  margin-bottom: 20px;
+}
+
+.setting .info > span:first-child {
+  padding-right: 10px;
+  color: #595959;
+}
+
+.setting .cancel {
+  margin-left: 20px;
+}
