@@ -1,6 +1,6 @@
 // import React, { FC, useEffect, useRef, useState } from "react";
 import React, { useRef, useCallback, useState, useEffect } from "react";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Spin } from "antd";
 import { FolderTwoTone } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import img1 from "../../resource/朱利安.jpg";
@@ -71,7 +71,7 @@ function LoadMore(props) {
           {fileLevel === 2 && <img className={styles.img} src={img1} />}
         </div>
       ))}
-      {isFetching && <div className={styles.loading}>Loading...</div>}
+      {isFetching && <div className={styles.loading}><Spin size="large" /></div>}
     </>
   );
 }

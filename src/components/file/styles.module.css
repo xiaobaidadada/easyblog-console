@@ -17,6 +17,6 @@
 }
 
 .file-wrapper .loading {
-  width: 100%;
-  text-align: center;
+  width: 180px;
+  padding-top: 50px;
 }
