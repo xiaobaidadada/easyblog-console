@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
@@ -127,7 +127,7 @@ const StateEditor = ({ msg }) => {
       <Button>保存为css插件</Button>
       <Button>保存为js插件</Button>
       <Button>保存为文章</Button>
-      <LocalizedModal />
+      {/* <LocalizedModal /> */}
     </div>
   );
 };

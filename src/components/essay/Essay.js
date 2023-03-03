@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import { HandleFetch } from "../../utils/fetch";

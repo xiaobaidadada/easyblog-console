@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Modal, Form, Row, Col, Input, InputNumber, Select, DatePicker, Checkbox, Button } from "antd";
 const { RangePicker } = DatePicker;

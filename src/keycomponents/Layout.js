@@ -1,5 +1,5 @@
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import React, {useState} from "react";
+import {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { Breadcrumb, Layout, Menu, theme, Button, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -59,7 +59,7 @@ export const menuList = [
     label: "系统设置",
     children: [
       {
-        key: "function",
+        key: "setting",
         label: "账号",
       },
     ],
@@ -83,9 +83,6 @@ const Loyout = () => {
     keyPath.forEach((element) => {
       rout = element + "/" + rout;
     });
-
-    if (rout == "file/") {
-    }
     navigate(rout); //路由跳转
   }
 
@@ -120,8 +117,8 @@ const Loyout = () => {
         >
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            defaultSelectedKeys={['essay']}
+            defaultOpenKeys={['essay']}
             style={{
               height: "100%",
               borderRight: 0,
