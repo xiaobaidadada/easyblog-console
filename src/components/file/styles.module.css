@@ -1,8 +1,22 @@
 .file-wrapper {
-  display: inline;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 180px);
+  grid-template-rows: repeat(auto-fill, 140px);
 }
 
-.file-wrapper > div {
-  display: inline-block;
-  margin: 12px 20px;
+.file-wrapper .file-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.file-wrapper .img {
+  width: 100px;
+}
+
+.file-wrapper .loading {
+  width: 100%;
+  text-align: center;
 }

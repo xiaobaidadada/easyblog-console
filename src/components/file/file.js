@@ -1,8 +1,80 @@
-import { FC, useEffect, useRef, useState } from "react";
+// import React, { FC, useEffect, useRef, useState } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
+import { Breadcrumb } from "antd";
 import { FolderTwoTone } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import img1 from "../../resource/朱利安.jpg";
 import img2 from "../../resource/树壁纸.jpg";
+
+// 触底分页加载
+function LoadMore(props) {
+  // 文件等级
+  const { fileLevel, setFileLevel } = props;
+  const limit = 10;
+  const currentPage = useRef(1);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!isFetching) return;
+    fetchData();
+  }, [isFetching]);
+
+  const fetchData = async () => {
+    setIsFetching(true);
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${currentPage.current}`
+      );
+      const result = await response.json();
+      setData((PrevData) => [...PrevData, ...result]);
+      setIsFetching(false);
+      console.log(`current page: ${currentPage.current}`);
+    } catch (error) {
+      console.log(error);
+      setIsFetching(false);
+    }
+  };
+
+  const handleScroll = useCallback(() => {
+    const scrollTop =
+      (document.documentElement && document.documentElement.scrollTop) ||
+      document.body.scrollTop;
+    const scrollHeight =
+      (document.documentElement && document.documentElement.scrollHeight) ||
+      document.body.scrollHeight;
+    if (scrollTop + window.innerHeight + 50 >= scrollHeight && !isFetching) {
+      currentPage.current++;
+      setIsFetching(true);
+    }
+  }, [isFetching]);
+
+  const fileClick = (id) => {
+    if (fileLevel === 1) {
+      console.log("fileLevel=1, id=", id);
+      setFileLevel(2);
+    }
+    console.log("fileLevel=2");
+  };
+  return (
+    <>
+      {data.map(({ id, title, body }, index) => (
+        <div key={index} onClick={() => fileClick(id)}>
+          {fileLevel === 1 && <FileBox key={id} title={title} />}
+          {fileLevel === 2 && <img className={styles.img} src={img1} />}
+        </div>
+      ))}
+      {isFetching && <div className={styles.loading}>Loading...</div>}
+    </>
+  );
+}
 
 /**
  * 图片组件
@@ -19,57 +91,37 @@ function Image_div(ww) {
 
 /**
  * 文件组件
- * @param {} yy
+ * @param {} title
  * @returns
  */
-function File_div(yy) {
+function FileBox(props) {
   return (
-    <div>
+    <div className={styles["file-box"]} onClick={() => props.onClick}>
       <FolderTwoTone
         style={{
           fontSize: "7em",
         }}
       />
+      {props.title.slice(0, 5)}
     </div>
   );
 }
 
 export default File = (props) => {
-  const fileList = [""];
-  const getData = () => {
-    for (let i = 0; i < 30; i++) {
-        fileList.push("");
-    }
-  };
-  getData();
-  const onScroll = (e) => {
-      // 网页滚动高度
-      const scrollTopHeight =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const showHeight = window.innerHeight;  // 文档显示区域的高度
-      const allHeight = document.body.scrollHeight;  // 所有内容的高度
-      // 判断内容盒子的高度+滚动条的scrollTop = 盒子内容的高度即为触底
-      if (allHeight - 66 < scrollTopHeight + showHeight) {
-        console.log("触底:");
-        // getData();
-      }
-  };
-  // 全局监听滚动事件
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      // 销毁监听
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  // 文件级别: 1-文件夹 2-图片
+  const [fileLevel, setFileLevel] = useState(1);
+
   return (
-    <div className={styles["file-wrapper"]}>
-      {fileList.map((item, index) => {
-        return <File_div className="file_div" key={index} />;
-      })}
-      {/* <File_div className='file_all_div'/> */}
-      {/* <Image_div r={img1} className='file_all_div' /> */}
-      {/* <Image_div r={img2} className='file_all_div' /> */}
-    </div>
+    <>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <a onClick={()=>setFileLevel(1)}>文件</a>
+        </Breadcrumb.Item>
+        {fileLevel === 2 && <Breadcrumb.Item>test文件夹</Breadcrumb.Item>}
+      </Breadcrumb>
+      <div className={styles["file-wrapper"]}>
+        <LoadMore fileLevel={fileLevel} setFileLevel={setFileLevel}></LoadMore>
+      </div>
+    </>
   );
 };
