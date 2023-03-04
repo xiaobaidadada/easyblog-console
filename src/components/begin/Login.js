@@ -6,18 +6,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Alert, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import styles from "./styles.module.css";
 import { HandleFetch } from "../../utils/fetch";
 
 // 登录组件
 function Login(props) {
   const navigate = useNavigate();
-  const [errProps, setErrProps] = useState({
-    type: "error",
-    msg: "请检查数据",
-  }); // 提示信息
-  const [showErrMsg, setShowErrMsg] = useState(false); // 显示提示
+  const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false); // 显示加载状态
   const [shouldRedirect, setShouldRedirect] = useState(false); // 是否开始延迟跳转
 
@@ -32,29 +28,23 @@ function Login(props) {
     return <></>;
   };
 
-  // 关闭警告提示
-  const handleClose = () => {
-    setShowErrMsg(false);
-  };
-
   // 提交登录
   const onFinish = async (formData) => {
     setLoading(true);
     try {
-      // // TODO 正式代码，暂时注释
+      // // TODO 请求代码，暂时注释
       // // @params {object} formData { username: "aaa", password: "222222" };
       // const res = await HandleFetch("/login", "POST", formData);
 
+      // TODO 测试数据，调接口后删除【***** start *****】
+      const res = {
+        msg: "666666",
+        code: 200,
+        token: "dddddddd",
+        account: formData.username,
+      };
+      // 【************ end ***********】
 
-      // TODO 测试效果，调接口后删除【*** start ****】
-      const res = { msg: "999", token: "dddddddd", account: formData.username };
-      AsyncStorage.setItem("EasyBlog_Token", res && res.token);
-      AsyncStorage.setItem("EasyBlog_Account", res && res.account);
-      setErrProps({ type: "success", msg: "登录成功！" });
-      setShouldRedirect(true);
-      // 【************ end *********】
-
-      
       if (res.code >= 400) {
         // 异常
         throw new Error(res.msg);
@@ -62,33 +52,36 @@ function Login(props) {
         // 本地缓存token和账号account
         AsyncStorage.setItem("EasyBlog_Token", res && res.token);
         AsyncStorage.setItem("EasyBlog_Account", res && res.account);
-        // 登录成功提示
-        setErrProps({ type: "success", msg: "登录成功！" });
-        setShowErrMsg(true);
+
+        // 成功提示
+        messageApi.open({
+          type: "success",
+          content: "登录成功！",
+        });
         // 跳转页面
         setShouldRedirect(true);
       }
     } catch (err) {
-      setErrProps({
+      // 失败提示
+      messageApi.open({
         type: "error",
-        msg: (err && err.toString()) || "请检查数据",
+        content: "登录失败！" + err.toString(),
       });
-      setShowErrMsg(true);
     } finally {
-      // 加载
-      setLoading(false);
+      setLoading(false); // 加载
     }
   };
 
   // 提交登录失败
   const onFinishFailed = (err) => {
-    setErrProps({ type: "error", msg: "请检查数据" });
-    setShowErrMsg(true);
+    messageApi.open({
+      type: "error",
+      content: "请检查数据",
+    });
   };
 
   return (
     <div className={styles["login-wrapper"]}>
-      {shouldRedirect && <DelayRedirect />}
       <Form
         name="searchForm"
         onFinish={onFinish}
@@ -129,21 +122,8 @@ function Login(props) {
           </Button>
         </Form.Item>
       </Form>
-
-      {showErrMsg && (
-        <Alert
-          style={{
-            minWidth: "180px",
-            position: "absolute",
-            top: "20px",
-          }}
-          message={errProps.msg}
-          type={errProps.type}
-          afterClose={handleClose}
-          banner
-          closable
-        />
-      )}
+      {contextHolder}
+      {shouldRedirect && <DelayRedirect />}
     </div>
   );
 }
