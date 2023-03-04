@@ -18,27 +18,6 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-// 密码校验
-const rules = {
-  pwd: [
-    {
-      required: true,
-      message: "请输入密码",
-    },
-    {
-      min: 6,
-      message: "请输入不少于6位的密码",
-    },
-  ],
-  confirm: [
-    {
-      required: true,
-      message: "请再次输入密码",
-    },
-    // { validator: validatePassword },
-  ],
-};
-
 // 获取账号数据(缓存)
 const AccountData = async (account, setAccount, messageApi) => {
   try {
@@ -110,9 +89,27 @@ const InputPwd = ({ setMode, messageApi }) => {
       return Promise.resolve();
     }
   };
-
-  // 再次输入密码，添加校验规则
-  !rules.confirm[1] && rules.confirm.push({ validator: validatePassword });
+  // 密码校验
+  const rules = {
+    pwd: [
+      {
+        required: true,
+        message: "请输入密码",
+      },
+      {
+        min: 6,
+        message: "请输入不少于6位的密码",
+      },
+    ],
+    confirm: [
+      {
+        required: true,
+        message: "请再次输入密码",
+      },
+      { validator: validatePassword },
+    ],
+  };
+  
   return (
     <>
       <Form

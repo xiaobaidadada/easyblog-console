@@ -1,0 +1,26 @@
+.layout-wrapper {
+    height: 100vh;
+    .aside {
+        width: 200px;
+        height: 100%;
+        padding-top: 6px;
+        background: #fff;
+        position: fixed;
+        top: 70px;
+    }
+    .menu {
+        height: 100%;
+        border-right: 0;
+    }
+    .inner-layout {
+        padding: 0 24px 24px;
+        .content {
+            margin: 85px 0 0 200px;
+            padding: 24px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow: scroll;
+        }
+    }
+}

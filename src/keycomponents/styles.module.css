@@ -1,0 +1,30 @@
+.layout-wrapper {
+  height: 100vh;
+}
+
+.layout-wrapper .aside {
+  width: 200px;
+  height: 100%;
+  padding-top: 6px;
+  background: #fff;
+  position: fixed;
+  top: 70px;
+}
+
+.layout-wrapper .menu {
+  height: 100%;
+  border-right: 0;
+}
+
+.layout-wrapper .inner-layout {
+  padding: 0 24px 24px;
+}
+
+.layout-wrapper .inner-layout .content {
+  margin: 85px 0 0 200px;
+  padding: 24px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}

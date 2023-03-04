@@ -1,25 +1,15 @@
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import {useState} from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Breadcrumb, Layout, Menu, theme, Button, Modal, Space } from "antd";
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Layout, Menu } from "antd";
 import RouteMain from "./RouteMain";
 import HeaderXB from "../components/header/HeaderXB";
-import "./layout.css";
+import styles from "./styles.module.css";
 
-const { Header, Content, Sider } = Layout;
 
-// export const nameContext = React.createContext("名nameContext");
+const { Content, Sider } = Layout;
 let routeName = ""; // 当前路由名
-// 顶部提示按钮
-const headerList = [
-  {
-    label: "退出",
-  },
-  {
-    label: "后台",
-  },
-];
+
 // 菜单
 export const menuList = [
   {
@@ -65,12 +55,10 @@ export const menuList = [
     ],
   },
 ];
+
 const Loyout = () => {
   const navigate = useNavigate();
-  var rout = "/";
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  let rout = "";
 
   /**
    * 菜单点击路由函数
@@ -79,7 +67,6 @@ const Loyout = () => {
   function menuControl({ item, key, keyPath, domEvent }) {
     console.log(keyPath);
     routeName = keyPath[0];
-    rout = "";
     keyPath.forEach((element) => {
       rout = element + "/" + rout;
     });
@@ -87,70 +74,31 @@ const Loyout = () => {
   }
 
   return (
-    <Layout>
+    <Layout className={styles["layout-wrapper"]}>
       {/* <--顶部--> */}
       <HeaderXB route={routeName} />
-      {/* <Header className="header" theme="light" style={{
-        background: colorBgContainer,
-        boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
-        // position: 'fixed'
-      }}>
-        <div className="logo" />
-        <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']} items={顶部提示按钮} />
-        <div style={{
-          display: 'inline-block'
-        }}>退出</div>
-      </Header> */}
 
-      {
-        //中部
-      }
       <Layout>
-        {
-          //侧边栏
-        }
-        <Sider
-          width={200}
-          style={{
-            background: colorBgContainer,
-          }}
-        >
+        {/* 侧边 */}
+        <Sider className={styles.aside}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={['essay']}
-            defaultOpenKeys={['essay']}
-            style={{
-              height: "100%",
-              borderRight: 0,
-            }}
+            defaultSelectedKeys={["essay"]}
+            defaultOpenKeys={["essay"]}
+            className={styles.menu}
             items={menuList}
             onClick={menuControl}
           />
         </Sider>
-
-        {
-          //内容
-        }
-        <Layout
-          style={{
-            padding: "0 24px 24px",
-          }}
-        >
-          <Content
-            style={{
-              marginTop: 30,
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }}
-          >
+        {/* 内容 */}
+        <Layout className={styles["inner-layout"]}>
+          <Content className={styles.content}>
             <RouteMain rout={rout} />
           </Content>
         </Layout>
+
       </Layout>
     </Layout>
   );
-  
 };
 export default Loyout;
