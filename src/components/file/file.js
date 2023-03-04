@@ -1,92 +1,74 @@
+import { useInView } from "react-intersection-observer";
 import { useRef, useCallback, useState, useEffect } from "react";
-import { Breadcrumb, Spin } from "antd";
+import { Breadcrumb, Spin, Image } from "antd";
 import { FolderTwoTone } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import img1 from "../../resource/朱利安.jpg";
-import img2 from "../../resource/树壁纸.jpg";
 
 // 触底分页加载
+let current = 0;
+let hasMore = true;
 function LoadMore(props) {
   // 文件等级
   const { fileLevel, setFileLevel } = props;
+  const [data, setData] = useState([]); // 要渲染的数据
   const limit = 10;
-  const currentPage = useRef(1);
   const [isFetching, setIsFetching] = useState(false);
+  // 触发监听
+  const observerOptions = {
+    rootMargin: "0px",
+    threshold: [0.75],
+  };
+  const [ref, inView] = useInView(observerOptions);
 
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!isFetching) return;
-    fetchData();
-  }, [isFetching]);
-
+  // 获取数据
   const fetchData = async () => {
+    hasMore = data.length < 100 && current < 11 && inView;
+    if (isFetching || !hasMore) return;
     setIsFetching(true);
+    current++;
     try {
       const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${currentPage.current}`
+        `https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${current}`
       );
       const result = await response.json();
       setData((PrevData) => [...PrevData, ...result]);
-      setIsFetching(false);
-      console.log(`current page: ${currentPage.current}`);
+      console.log(`current page: ${current}`);
     } catch (error) {
       console.log(error);
+    } finally {
       setIsFetching(false);
     }
   };
+  fetchData();
 
-  const handleScroll = useCallback(() => {
-    const scrollTop =
-      (document.documentElement && document.documentElement.scrollTop) ||
-      document.body.scrollTop;
-    const scrollHeight =
-      (document.documentElement && document.documentElement.scrollHeight) ||
-      document.body.scrollHeight;
-    if (scrollTop + window.innerHeight + 50 >= scrollHeight && !isFetching) {
-      currentPage.current++;
-      setIsFetching(true);
-    }
-  }, [isFetching]);
-
+  // 进入文件夹
   const fileClick = (id) => {
     if (fileLevel === 1) {
-      console.log("fileLevel=1, id=", id);
       setFileLevel(2);
     }
-    console.log("fileLevel=2");
   };
   return (
-    <>
+    <div
+      className={styles["file-wrapper"]}
+      onScroll={fetchData}
+      style={{ overflowY: "scroll" }}
+    >
       {data.map(({ id, title, body }, index) => (
         <div key={index} onClick={() => fileClick(id)}>
           {fileLevel === 1 && <FileBox key={id} title={title} />}
-          {fileLevel === 2 && <img className={styles.img} src={img1} />}
+          {fileLevel === 2 && <Image className={styles.img} src={img1} />}
         </div>
       ))}
-      {isFetching && <div className={styles.loading}><Spin size="large" /></div>}
-    </>
-  );
-}
-
-/**
- * 图片组件
- * @param {*} ww
- * @returns
- */
-function Image_div(ww) {
-  return (
-    <div className={ww.className}>
-      <img src={ww.r} className="file_image_div" />
+      {!isFetching && (
+        <div className={styles.loading} ref={ref}>
+          <Spin size="large" />
+        </div>
+      )}
     </div>
   );
 }
+
 
 /**
  * 文件组件
@@ -114,13 +96,11 @@ export default File = (props) => {
     <>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a onClick={()=>setFileLevel(1)}>文件</a>
+          <a onClick={() => setFileLevel(1)}>文件</a>
         </Breadcrumb.Item>
         {fileLevel === 2 && <Breadcrumb.Item>test文件夹</Breadcrumb.Item>}
       </Breadcrumb>
-      <div className={styles["file-wrapper"]}>
-        <LoadMore fileLevel={fileLevel} setFileLevel={setFileLevel}></LoadMore>
-      </div>
+      <LoadMore fileLevel={fileLevel} setFileLevel={setFileLevel}></LoadMore>
     </>
   );
 };
