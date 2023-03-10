@@ -3,7 +3,7 @@ import { useRef, useCallback, useState, useEffect } from "react";
 import { Breadcrumb, Spin, Image } from "antd";
 import { FolderTwoTone } from "@ant-design/icons";
 import styles from "./styles.module.css";
-import img1 from "../../resource/朱利安.jpg";
+import img1 from "@assets/file/julian.jpg";
 
 // 触底分页加载
 let current = 0;

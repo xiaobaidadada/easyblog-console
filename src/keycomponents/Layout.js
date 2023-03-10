@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import RouteMain from "./RouteMain";
+import RouteMain from "@router/RouteMain";
 import HeaderXB from "../components/header/HeaderXB";
 import styles from "./styles.module.css";
 
