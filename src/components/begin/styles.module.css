@@ -1,18 +1,37 @@
 .login-wrapper {
+  height: 100vh;
+  background-image: radial-gradient(transparent 1px, rgba(251, 244, 246, 0.9) 4px);
+  background-size: 4px 4px;
+  backdrop-filter: saturate(50%) blur(4px);
   display: flex;
-  height: 80%;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
 }
 
-.login-wrapper .btn-box {
-  width: 100%;
+.login-wrapper .login {
+  width: 500px;
+  height: 450px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 10px #eee;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-wrapper .btn-box :global .ant-btn-primary {
+.login-wrapper .login .title {
+  height: 70px;
+  line-height: 20px;
+}
+
+.login-wrapper .login .title img {
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.login-wrapper :global .ant-btn-primary {
   margin-top: 20px;
-  width: 120px;
+  width: 220px;
 }

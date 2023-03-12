@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import styles from "./styles.module.css";
@@ -22,7 +21,7 @@ const tailLayout = {
 const AccountData = async (account, setAccount, messageApi) => {
   try {
     if (Object.is(account, "")) {
-      const acc = await AsyncStorage.getItem("EasyBlog_Account");
+      const acc = localStorage.getItem("EasyBlog_Account");
       accountValue = acc;
       setAccount(accountValue);
     }

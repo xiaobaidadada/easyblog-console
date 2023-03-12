@@ -325,7 +325,7 @@ module.exports = function (webpackEnv) {
         '@router': path.resolve(__dirname, '../src/router'),
         '@utils': path.resolve(__dirname, '../src/utils'),
         '@keycomponents': path.resolve(__dirname, '../src/keycomponents'),
-        // '@store': path.resolve(__dirname, '../src/store'),
+        '@store': path.resolve(__dirname, '../src/store'),
         // '@mock': path.resolve(__dirname, '../src/mock')
       },
       plugins: [

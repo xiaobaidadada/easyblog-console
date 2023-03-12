@@ -3,15 +3,20 @@
 // import { Login as log_in } from "@mui/icons-material";
 // import TextField from '@mui/material/TextField';
 // import Input from '@mui/material/Input';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// "@react-native-async-storage/async-storage": "^1.17.11",
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Button, Form, Input, message } from "antd";
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import styles from "./styles.module.css";
+import { setUser } from "@store/modules/app/action";
 import { HandleFetch } from "../../utils/fetch";
+import logo from "@assets/common/logo.png"
 
 // 登录组件
-function Login(props) {
+function Login1(props) {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false); // 显示加载状态
@@ -50,8 +55,8 @@ function Login(props) {
         throw new Error(res.msg);
       } else {
         // 本地缓存token和账号account
-        AsyncStorage.setItem("EasyBlog_Token", res && res.token);
-        AsyncStorage.setItem("EasyBlog_Account", res && res.account);
+        // AsyncStorage.setItem("EasyBlog_Token", res && res.token);
+        // AsyncStorage.setItem("EasyBlog_Account", res && res.account);
 
         // 成功提示
         messageApi.open({
@@ -128,4 +133,92 @@ function Login(props) {
   );
 }
 
+// 登录组件
+function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  let [loading, setLoading] = useState(false);
+
+  const onFinish = (values) => {
+    setLoading(true);
+
+    message.success("登录成功");
+    // 这里应该根据实际权限跳转，通常是home，或者其他页面
+    navigate("/essay");
+    return;
+    HandleFetch({
+      url: `/login`,
+      method: "post",
+      data: values,
+    })
+      .then((res) => {
+        setLoading(false);
+        if (res.code === 200) {
+          const { permission, token } = res.data;
+          let auth = {},
+            param = {};
+          permission
+            .filter((item) => item.type === "btn")
+            .forEach((item) => {
+              if (auth[item.path]) {
+                auth[item.path][item.key] = true;
+              } else {
+                auth[item.path] = {
+                  [item.key]: true,
+                };
+              }
+            });
+          param = {
+            user: { id: 1186, name: "张三" },
+            permission,
+            auth,
+            token,
+          };
+          dispatch(setUser(param));
+          message.success("登录成功");
+          navigate("/essay");
+        } else {
+          setLoading(false);
+          message.error(res.msg);
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log("error", error);
+        message.error(error);
+      });
+  };
+
+  return (
+    <div  className={styles["login-wrapper"]}>
+      <div className={styles["login"]}>
+        <div className={styles['title']}><img src={logo} />个人博客管理系统</div>
+        <Form
+          name="basic"
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "请输入账号" }]}
+          >
+            <Input  prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "请输入密码!" }]}
+          >
+            <Input.Password  prefix={<LockOutlined className="site-form-item-icon" />} placeholder="请输入密码" />
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 0, span: 24 }}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              登录
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
+  );
+}
 export default Login;

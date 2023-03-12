@@ -1,5 +1,5 @@
 // import qs from 'qs';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BaseUrl } from "./api";
 
 
@@ -40,7 +40,7 @@ export async function HandleFetch(
   data = {},
   resType = "JSON"
 ) {
-  const userToken = await AsyncStorage.getItem("EasyBlog_Token");
+  const userToken = localStorage.getItem("EasyBlog_Token");
   const auth = userToken ? { Authorization: `Bearer ${userToken}` } : {};
   method = method.toUpperCase();
   resType = method.toUpperCase();
