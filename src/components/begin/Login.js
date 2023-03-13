@@ -9,11 +9,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Button, Form, Input, message } from "antd";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import { setUser } from "@store/modules/app/action";
 import { HandleFetch } from "../../utils/fetch";
-import logo from "@assets/common/logo.png"
+import logo from "@assets/common/logo.png";
 
 // 登录组件
 function Login1(props) {
@@ -142,8 +142,14 @@ function Login() {
   const onFinish = (values) => {
     setLoading(true);
 
+    const param = {
+      user: { id: 1186, name: values.username, password: values.password },
+      permission: 1,
+      auth: "auth-example",
+      token: "easyblog" + new Date().getTime(),
+    };
+    dispatch(setUser(param));
     message.success("登录成功");
-    // 这里应该根据实际权限跳转，通常是home，或者其他页面
     navigate("/essay");
     return;
     HandleFetch({
@@ -190,25 +196,31 @@ function Login() {
   };
 
   return (
-    <div  className={styles["login-wrapper"]}>
+    <div className={styles["login-wrapper"]}>
       <div className={styles["login"]}>
-        <div className={styles['title']}><img src={logo} />个人博客管理系统</div>
-        <Form
-          name="basic"
-          onFinish={onFinish}
-        >
+        <div className={styles["title"]}>
+          <img src={logo} />
+          个人博客管理系统
+        </div>
+        <Form name="basic" onFinish={onFinish}>
           <Form.Item
             name="username"
             rules={[{ required: true, message: "请输入账号" }]}
           >
-            <Input  prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="请输入账号"
+            />
           </Form.Item>
 
           <Form.Item
             name="password"
             rules={[{ required: true, message: "请输入密码!" }]}
           >
-            <Input.Password  prefix={<LockOutlined className="site-form-item-icon" />} placeholder="请输入密码" />
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="请输入密码"
+            />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 0, span: 24 }}>
