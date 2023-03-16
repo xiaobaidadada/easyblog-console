@@ -1,11 +1,12 @@
 import './header.css'
+import status from '../config/config.js'
 
 /**
  * 登录状态组件
  * @param {} yy
  * @returns
  */
-function State(yy) {
+function Out(yy) {
     return (
         <div>
             <button>退出登录</button>
@@ -41,16 +42,37 @@ function Add() {
 }
 
 export default function HeaderXB(props) {
+    let Ha;
+    let header_type=props.header_type;
+    if ( header_type === "index") {
+        Ha = null;
+    }
+    else if(header_type === "update"){
+        Ha = Update;
+    }
+    else if(header_type === "Add"){
+        Ha = Add;
+    }
 
     return (
         <div id='header'>
 
-            <div className="header_flag" >
+            <div className="header_flag">
                 EASYORM
             </div>
 
+            <div className="header_controll">
+                {Ha !=null &&
+                    <Ha  />
+                }
+            </div>
 
-            {/*<State/>*/}
+            <div className="header_controll">
+                {status.if_login &&
+                    <Out />
+                }
+            </div>
+
         </div>
 
     );

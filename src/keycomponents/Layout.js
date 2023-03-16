@@ -1,6 +1,6 @@
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import React from 'react';
+import React,{ useState } from 'react';
 import './layout.css';
 import RouteMain from './RouteMain'
 import { useNavigate } from 'react-router-dom';
@@ -64,9 +64,12 @@ const Loyout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  //顶部导航栏设置
+  const [bar, setBar] = useState("index");
+
   /**
    * 菜单点击路由函数
-   * @param {*} param0 
+   * @param {*} param0
    */
   function menuControl({ item, key, keyPath, domEvent }) {
     console.log(keyPath)
@@ -75,16 +78,17 @@ const Loyout = () => {
       rout = element + '/'+rout;
     });
 
-    if(rout=='file/'){
-      
+    if(rout==='file/'){
+      this.setState({ bar: "update"})
     }
     navigate(rout)//路由跳转
+
   }
 
   return (
     <Layout>
       {/* <--顶部--> */}
-      <HeaderXB />
+      <HeaderXB header_type={bar}/>
       {/* <Header className="header" theme="light" style={{
         background: colorBgContainer,
         boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
@@ -103,7 +107,7 @@ const Loyout = () => {
         {//侧边栏
         }
         <Sider
-          width={200}   
+          width={200}
           style={{
             background: colorBgContainer,
           }}
