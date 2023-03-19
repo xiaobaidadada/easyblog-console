@@ -24,4 +24,4 @@ function asy_get(path, query, handle) {
 
 }
 
-export default get;
+export default asy_get;

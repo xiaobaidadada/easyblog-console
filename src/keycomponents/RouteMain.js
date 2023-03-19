@@ -24,7 +24,7 @@ function RouteMain(props) {
         <Route path='/essay' element={<Essay />}>
 
         </Route>
-        <Route path='/eaitor' element={<Ace />} />
+        <Route path='/eaitor' element={<Ace mode={props.mode} />} />
         <Route path='/plug/css' element={<Css />} />
         <Route path='/plug/js' element={<Js />} />
         <Route path='/comment' element={<Comment />} />
@@ -35,37 +35,5 @@ function RouteMain(props) {
   );
 }
 
-//默认接受props属性
-
-// class RouteMain extends React.Component {
-  
-//   constructor(props) {
-//     super(props);
-//     // this.state = {path: '/'};
-
-//   }
-//   componentDidUpdate(){
-//     console.log(1)
-    
-
-//   }
-//   componentDidMount() {
-//     console.log(1)
-
-//   }
-//   render() {
-//     return (
-//       <BrowserRouter>
-//       <Routes >
-//         <Route path="/" element={<Login />}>
-//         </Route>
-//         <Route path='/main/' element={<Main />}>
-
-//         </Route>
-//       </Routes>
-//     </BrowserRouter>
-//     );
-//   }
-// }
 export default RouteMain;
 

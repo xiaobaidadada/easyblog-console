@@ -1,6 +1,6 @@
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import './layout.css';
 import RouteMain from './RouteMain'
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +42,7 @@ const 菜单 = [
   },
   {
     label: '评论管理',
-    key:'comment'
+    key: 'comment'
   },
   {
     key: 'file',
@@ -64,9 +64,10 @@ const Loyout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  //状态设置
   //顶部导航栏设置
   const [bar, setBar] = useState("index");
-
+  const [mode, setMd] = useState("md");
   /**
    * 菜单点击路由函数
    * @param {*} param0
@@ -75,31 +76,28 @@ const Loyout = () => {
     console.log(keyPath)
     rout = '';
     keyPath.forEach(element => {
-      rout = element + '/'+rout;
+      rout = element + '/' + rout;
     });
 
-    if(rout==='file/'){
-      this.setState({ bar: "update"})
+    if (rout === 'eaitor/') {
+      setBar("eaitor")
+    }
+    else {
+      setBar("index")
     }
     navigate(rout)//路由跳转
 
   }
 
+  //操作头
+  function md_f(md_p){
+      setMd(md_p)
+  }
   return (
     <Layout>
       {/* <--顶部--> */}
-      <HeaderXB header_type={bar}/>
-      {/* <Header className="header" theme="light" style={{
-        background: colorBgContainer,
-        boxShadow: ' 0 0 5px rgb(0 0 0 / 10%)',
-        // position: 'fixed'
-      }}>
-        <div className="logo" />
-        <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']} items={顶部提示按钮} />
-        <div style={{
-          display: 'inline-block'
-        }}>退出</div>
-      </Header> */}
+      <HeaderXB md_f={md_f} header_type={bar} />
+
 
       {//中部
       }
@@ -141,7 +139,7 @@ const Loyout = () => {
               background: colorBgContainer,
             }}
           >
-            <RouteMain rout={rout} />
+            <RouteMain mode={mode} />
           </Content>
         </Layout>
       </Layout>
