@@ -7,8 +7,8 @@ let status = {
 
 //文章管理联动编辑器 默认格式
 let edit ={
-    type:'essay胡总和js',
-    type:'主页或者文章',
+    type_1:'essay胡总和js',
+    type_2:'主页或者文章',
     mode:'css 编辑器模式',
     context:'编辑器内容'
 }
