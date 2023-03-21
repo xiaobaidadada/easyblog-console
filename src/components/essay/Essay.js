@@ -161,6 +161,16 @@ function Essay() {
   const [loading, setLoading] = useState(false); // 搜索-加载
   const [cEditloading, setCEditloading] = useState(false); // 弹窗-编辑-加载
 
+  // 改变分页
+  const handleTableChange = async (val) => {
+    console.log('handleTableChange',val);
+    
+    const res = await HandleFetch("/rand.music", "GET", {
+      sort: "热歌榜",
+      mid: "862101001",
+      format: "json",
+    });
+  };
   // 搜索
   const handleSearch = async () => {
     console.log("搜索: ", searchForm);
@@ -283,7 +293,7 @@ function Essay() {
           <Row gutter={26} className={styles.serachSection}>
             {searchItem.map((item, index) => {
               return (
-                <Form.Item label={item.label} key={item.key}>
+                <Form.Item label={item.label} key={index}>
                   {item.type === "input" && (
                     <Input
                       placeholder={item.placeholder}
@@ -318,7 +328,11 @@ function Essay() {
           </Row>
         </Form>
 
-        <Table dataSource={dataSource} pagination={pagination}>
+        <Table
+          dataSource={dataSource}
+          pagination={pagination}
+          onChange={handleTableChange}
+        >
           <Column title="id" dataIndex="id" key="id" />
           <Column title="标题" dataIndex="title" key="title" />
           <Column title="更新时间" dataIndex="time" key="time" />

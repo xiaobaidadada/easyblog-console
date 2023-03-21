@@ -134,7 +134,7 @@ const StateEditor = ({ msg }) => {
 
 export default function HeaderXB(props) {
   // const title = menuList.find((item) => item.key === props.route);
-  const title = '个人博客管理系统'
+  const title = 'EASYORM'
   return (
     <div id="header" className={styles.header}>
       {props.route !== "eaitor" && <Title title={title}></Title>}

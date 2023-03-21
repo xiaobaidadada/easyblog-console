@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import store from "@store/index";
 import "./index.css";
 import App from "./App";
+import '@mock/index.js';
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
