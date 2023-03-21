@@ -28,6 +28,7 @@ function Comment() {
     const [page, setPage] = useState(1);//默认是第一页的前面
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
+
     const [dataSource, setDataSource] = useState([
         {
             id: '1',
@@ -42,13 +43,18 @@ function Comment() {
             context: '不是吧'
         },
     ]);
+    const [info, setInfo] = useState({
+        total: 100,
+        title: "无",
+    });
 
     //请求数据
-    function to_get(e_size, e_page, title, id, time_begin, time_end) {
+    function to_get(e_size, e_page, title, id, context,time_begin, time_end) {
         //todo 参数需要改
-        asy_get("essay/getP", `size=${e_size}&page=${e_page }
+        asy_get("comment/getCP", `size=${e_size}&page=${e_page }
   ${title != undefined && title != "" && title != null ? "&title=" + title : ""}
-  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}`, data => {
+  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}
+  ${context != undefined && context != "" && context != null ? "&context=" + context : ""}`, data => {
 
             if (data.code == "未知") alert("请求出错")
             else {
@@ -56,17 +62,16 @@ function Comment() {
                 let list = []
                 let re_list = data.data.list;
                 // todo 补充符合的代码
-                // for (let i = 0; i < re_list.length; i++) {
-                //     let v = re_list[i];
-                //     console.log(v)
-                //     list.push({
-                //         id: v.id,
-                //         title: v.title,
-                //         time: "00",
-                //         type: v.type_id
-                //     })
-                // }
-                // setDataSource(list)
+                for (let i = 0; i < re_list.length; i++) {
+                    let v = re_list[i];
+                    list.push({
+                        id: v.id,
+                        // eaasy_title: v.title,
+                        time: "00",
+                        context: v.context
+                    })
+                }
+                setDataSource(list)
 
                 //设置分页
                 let p = data.data;
@@ -81,37 +86,36 @@ function Comment() {
 
     //组件挂载加载
     useEffect(() => {
-        // asy_get("essay/get_static", "", data => {
-        //
-        //     if (data.code == "未知") alert("请求出错")
-        //     else {
-        //         let rein = data.data;
-        //         setInfo({
-        //             essay_total: rein.文章总数量,
-        //             max_click: rein.最高浏览文章,
-        //             essay_look_click: rein.文章浏览总量
-        //         })
-        //
-        //     }
-        // });
+        asy_get("comment/get_static", "", data => {
+        
+            if (data.code == "未知") alert("请求出错")
+            else {
+                let rein = data.data;
+                setInfo({
+                    title: rein.title,
+                    total: rein.total,
+                })
+        
+            }
+        });
 
+        // 首次请求列表数据
         to_get(size, page);
 
     }, []);// 仅在 []内变量  发生变化时，重新订阅
 
     //搜索
     function search() {
-        // let id = document.getElementById("essay_id").value;
-        // let title = document.getElementById("essay_title").value;
-        // to_get(5, 1, title, id);
+        let id = document.getElementById("id").value;
+        let title = document.getElementById("essay_title").value;
+        let context = document.getElementById("context").value;
+        to_get(size, page, title, id,context);
     }
 
     //下一页
     const onChange = (pageNumber) => {
         setPage(pageNumber)
-        let id = document.getElementById("essay_id").value;
-        let title = document.getElementById("essay_title").value;
-        to_get(size, page, title, id);
+        search();
     };
 
     return (
@@ -128,8 +132,8 @@ function Comment() {
                     xs: 1,
                 }}
             >
-                <Descriptions.Item label="评论总数">12</Descriptions.Item>
-                <Descriptions.Item label="评论最多文章">Prepaid</Descriptions.Item>
+                <Descriptions.Item label="评论总数">{info.total}</Descriptions.Item>
+                <Descriptions.Item label="评论最多文章">{info.title}</Descriptions.Item>
 
 
 
@@ -138,19 +142,19 @@ function Comment() {
             <div>
                 <Row gutter={26}>
                     <Col span={5}>
-                        <Input placeholder="id" />
+                        <Input placeholder="id" id='id' />
                     </Col>
                     <Col span={5}>
-                        <Input placeholder="内容" />
+                        <Input placeholder="内容" id='context' />
                     </Col>
                     <Col span={5}>
-                        <Input placeholder="文章标题" />
+                        <Input placeholder="文章标题" id='essay_title' />
                     </Col>
                     <Col span={6}>
                         <RangePicker picker="month" />
                     </Col>
                     <Col span={3}>
-                        <Button icon={<SearchOutlined />}>搜索</Button>
+                        <Button icon={<SearchOutlined />} onClick={search} >搜索</Button>
 
                     </Col>
 
@@ -172,7 +176,7 @@ function Comment() {
                         )}
                     />
                 </Table>
-                <Pagination defaultCurrent={6} total={500} />
+                <Pagination defaultCurrent={page} total={total} onChange={onChange} />
             </div>
 
         </div>
