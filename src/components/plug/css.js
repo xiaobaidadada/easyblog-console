@@ -17,28 +17,46 @@ import {
 } from 'antd';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
+import { Switch } from 'antd';
+import React, { useState, useEffect } from 'react';
 
 const dataSource = [
   {
     id: '1',
     title: '关于正则表达式',
     time: '2021-01-03',
+    action: '哈哈',
+    on: true,
   },
   {
     id: '2',
     title: 'TCP协议',
     time: '2023-01-03',
+    action: '看看',
+    on: false,
   },
 ];
 const { RangePicker } = DatePicker;
 const { Column, ColumnGroup } = Table;
 
+/**
+ * ture 首页， false 博客 ；
+ */
+let checkbox = true;
 
 function Css() {
-  
-    // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-    return (
-      <div>
+
+  // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+
+
+  const on_switch = (checked) => {
+    checkbox = checked;
+    console.log(`switch to ${checkbox}`);
+  };
+
+  return (
+    <div>
       <Descriptions
         title="CSS插件"
         bordered
@@ -53,29 +71,13 @@ function Css() {
       >
         <Descriptions.Item label="插件数量">12</Descriptions.Item>
         <Descriptions.Item label="正在使用">Prepaid</Descriptions.Item>
-        {/* <Descriptions.Item label="最高浏览量文章">18:00:00</Descriptions.Item> */}
-        {/* <Descriptions.Item label="Amount">$80.00</Descriptions.Item>
-      <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-      <Descriptions.Item label="Official">$60.00</Descriptions.Item>
-      <Descriptions.Item label="Config Info">
-        Data disk type: MongoDB
-        <br />
-        Database version: 3.4
-        <br />
-        Package: dds.mongo.mid
-        <br />
-        Storage space: 10 GB
-        <br />
-        Replication factor: 3
-        <br />
-        Region: East China 1
-      </Descriptions.Item> */}
+
 
       </Descriptions>
       <Divider>*</Divider>
       <div>
         <Row gutter={26}>
-          <Col span={5}>
+          <Col span={2}>
             <Input placeholder="id" />
           </Col>
           <Col span={6}>
@@ -88,6 +90,9 @@ function Css() {
             <Button icon={<SearchOutlined />}>搜索</Button>
 
           </Col>
+          <Col span={3}>
+            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={on_switch} />
+          </Col>
           <Col span={2}>
             <Button icon={<PlusOutlined />}>导入css</Button>
 
@@ -99,11 +104,18 @@ function Css() {
           <Column title="标题" dataIndex="title" key="title" />
           <Column title="更新时间" dataIndex="time" key="time" />
           <Column
-            title="Action"
-            key="action"
-            render={(_, record) => (
+
+            render={(record) => (
               <Space size="middle">
-                <a>编辑 </a>
+                <Switch defaultChecked={record.on}  />
+              </Space>
+            )}
+          />
+          <Column
+            title="Action"
+            render={(record) => (
+              <Space size="middle">
+                <a>编辑 {record.action}</a>
                 <a>删除</a>
               </Space>
             )}
@@ -113,7 +125,7 @@ function Css() {
       </div>
 
     </div>
-    );
+  );
 }
 
 export default Css;
