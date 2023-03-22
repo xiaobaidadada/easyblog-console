@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
-import { HandleFetch } from "../../utils/fetch";
+import { HandleFetch, HandleAjax } from "../../utils/fetch";
 import CEditModal from "../editModal/CEditModal";
 import {
   AutoComplete,
@@ -163,8 +163,8 @@ function Essay() {
 
   // 改变分页
   const handleTableChange = async (val) => {
-    console.log('handleTableChange',val);
-    
+    console.log("handleTableChange", val);
+
     const res = await HandleFetch("/rand.music", "GET", {
       sort: "热歌榜",
       mid: "862101001",
@@ -175,11 +175,7 @@ function Essay() {
   const handleSearch = async () => {
     console.log("搜索: ", searchForm);
     setLoading(true);
-    const res = await HandleFetch("/rand.music", "GET", {
-      sort: "热歌榜",
-      mid: "862101001",
-      format: "json",
-    });
+    const res = await HandleAjax("/api/essay/list", "GET", {});
     setLoading(false);
   };
   // 打开弹窗 编辑/删除/导入

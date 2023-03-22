@@ -1,5 +1,6 @@
 import Mock from 'mockjs';
 import LOGIN from './login';
+import ESSAY from './essay';
 import REPORT from './report';
 
 Mock.setup({
@@ -23,6 +24,18 @@ Mock.mock('/api/getUserInfo', 'post', () => {
     msg: 'success',
     data: {
       ...LOGIN.userInfo
+    }
+  }
+})
+
+
+// 获取文章列表
+Mock.mock('/api/essay/list', 'get', d => {
+  return {
+    code: 200,
+    msg: 'success',
+    data: {
+      ...ESSAY.list
     }
   }
 })

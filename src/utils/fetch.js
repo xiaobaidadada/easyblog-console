@@ -2,7 +2,6 @@
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BaseUrl } from "./api";
 
-
 async function fetchExample(url = "", method = "GET", data = {}) {
   // Default options are marked with *
   const config = {
@@ -95,4 +94,44 @@ export async function HandleFetch(
   }
 
   return responseJson;
+}
+export function HandleAjax(url = "", method = "GET", data = {}) {
+  var xmlhttp;
+  if (window.XMLHttpRequest) {
+    // Mozilla, Firefox, Chrome, Opera, Safari, IE7+ ...
+    xmlhttp = new window.XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    // IE 6 and older
+    xmlhttp = new window.ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      console.log("xmlhttp:", xmlhttp);
+      console.log("xmlhttp.responseText:", xmlhttp.responseText);
+      return xmlhttp.responseText;
+    }
+  };
+  if (method === "GET") {
+    let dataStr = "";
+    Object.keys(data).forEach((key) => {
+      dataStr += key + "=" + data[key] + "&";
+    });
+    if (dataStr !== "") {
+      dataStr = dataStr.substring(0, dataStr.lastIndexOf("&"));
+      url = url + "?" + dataStr;
+    }
+    xmlhttp.open(method, url, true);
+    xmlhttp.setRequestHeader(
+      "Content-type",
+      "application/x-www-form-urlencoded"
+    );
+    xmlhttp.send();
+  } else {
+    xmlhttp.open(method, url, true);
+    xmlhttp.setRequestHeader(
+      "Content-type",
+      "application/x-www-form-urlencoded"
+    );
+    xmlhttp.send(data);
+  }
 }
