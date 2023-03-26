@@ -1,5 +1,5 @@
-import {Descriptions} from 'antd';
-import {Divider} from 'antd';
+import { Descriptions } from 'antd';
+import { Divider } from 'antd';
 import {
     AutoComplete,
     Button,
@@ -14,16 +14,21 @@ import {
     Space,
     Table, Tag
 } from 'antd';
-import {SearchOutlined, PlusOutlined} from '@ant-design/icons';
-import {Pagination} from 'antd';
-import React, {useState, useEffect} from 'react';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { Pagination } from 'antd';
+import React, { useState, useEffect } from 'react';
 import asy_get from '../config/requests'
+import { useNavigate } from 'react-router-dom';
 
-const {RangePicker} = DatePicker;
-const {Column, ColumnGroup} = Table;
+const { RangePicker } = DatePicker;
+const { Column, ColumnGroup } = Table;
 
 
-function Essay() {
+
+
+
+function Essay(props) {
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);//默认是第一页的前面
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
@@ -44,6 +49,32 @@ function Essay() {
         max_click: "无",
         essay_look_click: 1000
     });
+
+    //编辑跳转
+    function to_edit(id) {
+
+        asy_get("essay/get", `id=${id}`, data => {
+
+            if (data.code == "未知") alert("请求出错")
+            else {
+                let rein = data.data;
+
+                let title = rein.title;
+                let context = rein.context;
+
+
+                localStorage.setItem('edit',JSON.stringify( {
+                    type: 'essay',
+                    input: title,
+                    context: context
+                }));
+                props.header_f('eaitor')
+                navigate("/eaitor")//路由跳转
+            }
+        });
+
+
+    }
 
 
     //请求数据
@@ -141,20 +172,20 @@ function Essay() {
             <div>
                 <Row gutter={26}>
                     <Col span={5}>
-                        <Input placeholder="id" id="essay_id"/>
+                        <Input placeholder="id" id="essay_id" />
                     </Col>
                     <Col span={6}>
-                        <Input placeholder="标题" id="essay_title"/>
+                        <Input placeholder="标题" id="essay_title" />
                     </Col>
                     <Col span={6}>
-                        <RangePicker picker="month"/>
+                        <RangePicker picker="month" />
                     </Col>
                     <Col span={3}>
-                        <Button icon={<SearchOutlined/>} onClick={search}>搜索</Button>
+                        <Button icon={<SearchOutlined />} onClick={search}>搜索</Button>
 
                     </Col>
                     <Col span={2}>
-                        <Button icon={<PlusOutlined/>}>导入md</Button>
+                        <Button icon={<PlusOutlined />}>导入md</Button>
 
                     </Col>
                 </Row>
@@ -162,16 +193,16 @@ function Essay() {
 
                 {/* columns={columns} pagination={false}分尼玛的页啊 */}
                 <Table dataSource={dataSource} pagination={false}>
-                    <Column title="id" dataIndex="id" key="id"/>
-                    <Column title="标题" dataIndex="title" key="title"/>
-                    <Column title="更新时间" dataIndex="time" key="time"/>
-                    <Column title="文章类型" dataIndex="type" key="type"/>
+                    <Column title="id" dataIndex="id" key="id" />
+                    <Column title="标题" dataIndex="title" key="title" />
+                    <Column title="更新时间" dataIndex="time" key="time" />
+                    <Column title="文章类型" dataIndex="type" key="type" />
                     <Column
                         title="Action"
                         key="action"
-                        render={(_, record) => (
+                        render={( record) => (
                             <Space size="middle">
-                                <a>编辑 </a>
+                                <a onClick={(v)=>{to_edit(record.id)} }>编辑 </a>
                                 <a>删除</a>
                             </Space>
                         )}
@@ -179,7 +210,7 @@ function Essay() {
                     />
                 </Table>
 
-                <Pagination defaultCurrent={page} total={total} onChange={onChange}/>
+                <Pagination defaultCurrent={page} total={total} onChange={onChange} />
             </div>
 
         </div>

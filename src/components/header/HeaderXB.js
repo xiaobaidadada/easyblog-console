@@ -1,6 +1,7 @@
 import './header.css'
 import status from '../config/config.js'
 import { Button, Dropdown } from 'antd';
+import {asy_post_by_json}  from '../config/requests'
 
 /**
  * 登录状态组件
@@ -15,19 +16,22 @@ function Out(yy) {
 }
 
 /**
- * 编辑器修改状态
+ * 编辑器修改状态组件
  * @param {显示保存js or css or 文章} yy
  * @returns
  */
 function Update(yy) {
     return (
         <div>
-            <button>取消</button>
-            <button>确定修改{yy.name}</button>
+            <Button>取消</Button>
+            <Button>确定修改</Button>
         </div>)
 }
 
+//保存发送函数
+function send_new(){
 
+}
 
 //功能菜单
 const items = [
@@ -74,23 +78,34 @@ const items = [
 ]
 
 /**
- * 直接点击编辑
+ * 直接点击编辑组件
  * @param {}
  * @returns
  */
 
 function Add(props) {
 
-    const add_f = ({ key}) => {
+    //点击模式
+    const add_f = ({ key }) => {
         // console.log(key)
-    
+
         if (key == 1) {
-            props.md_f("markdown")
-        }else if(key == 2 || key == 4){
-            props.md_f("javascript")
+            //md_f是父组件给的函数
+            props.md_f({
+                mode: "markdown",
+                input: "输入文章标题"
+            })
+        } else if (key == 2 || key == 4) {
+            props.md_f({
+                mode: "javascript",
+                input: "输入JS插件名字"
+            })
         }
-        else if(key == 3 || key == 5){
-            props.md_f("css")
+        else if (key == 3 || key == 5) {
+            props.md_f({
+                mode: "css",
+                input: "输入CSS插件名字"
+            })
         }
     };
 
@@ -131,9 +146,9 @@ export default function HeaderXB(props) {
 
     return (
         <div id='header'>
-
+            {/*props.header_type*/}
             <div className="header_flag">
-                EASYORM {props.header_type}
+                EASYORM
             </div>
 
             <div className="header_controll">

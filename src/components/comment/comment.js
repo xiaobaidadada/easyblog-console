@@ -18,17 +18,21 @@ import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import React, { useState, useEffect } from 'react';
 import asy_get from '../config/requests'
+import { useNavigate } from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
 const { Column, ColumnGroup } = Table;
 
 
-function Comment() {
+function Comment(props) {
     // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
     const [page, setPage] = useState(1);//默认是第一页的前面
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
+    const navigate = useNavigate();
 
+
+    //数据源
     const [dataSource, setDataSource] = useState([
         {
             id: '1',
@@ -48,13 +52,40 @@ function Comment() {
         title: "无",
     });
 
+    //编辑跳转
+    function to_edit(id) {
+
+        asy_get("comment/get", `id=${id}`, data => {
+
+            if (data.code == "未知") alert("请求出错")
+            else {
+                let rein = data.data;
+
+                let title = rein.title;
+                let context = rein.context;
+
+
+                localStorage.setItem('edit',JSON.stringify( {
+                    type: 'comment',
+                    mode:'txt',
+                    input: null,
+                    context: context
+                }));
+                props.header_f('update')
+                navigate("/eaitor")//路由跳转
+            }
+        });
+
+
+    }
+
     //请求数据
     function to_get(e_size, e_page, title, id, context,time_begin, time_end) {
         //todo 参数需要改
         asy_get("comment/getCP", `size=${e_size}&page=${e_page }
-  ${title != undefined && title != "" && title != null ? "&title=" + title : ""}
-  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}
-  ${context != undefined && context != "" && context != null ? "&context=" + context : ""}`, data => {
+    ${title != undefined && title != "" && title != null ? "&title=" + title : ""}
+    ${id != undefined && id != "" && id != null ? "&id=" + id : ""}
+    ${context != undefined && context != "" && context != null ? "&context=" + context : ""}`, data => {
 
             if (data.code == "未知") alert("请求出错")
             else {
@@ -159,7 +190,7 @@ function Comment() {
                     </Col>
 
                 </Row>
-                {/* columns={columns}  */}
+               
                 <Table dataSource={dataSource} pagination={false} >
                     <Column title="id" dataIndex="id" key="id" />
                     <Column title="内容" dataIndex="context" key="context" />
@@ -170,7 +201,7 @@ function Comment() {
                         key="action"
                         render={(_, record) => (
                             <Space size="middle">
-                                <a>编辑 </a>
+                                <a  onClick={(v)=>{to_edit(record.id)} }>编辑 </a>
                                 <a>删除</a>
                             </Space>
                         )}

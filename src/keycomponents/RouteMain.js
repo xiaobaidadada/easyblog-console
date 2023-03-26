@@ -21,13 +21,13 @@ function RouteMain(props) {
         <Route path='/main' element={<Main />}>
 
         </Route>
-        <Route path='/essay' element={<Essay />}>
+        <Route path='/essay' element={<Essay header_f={props.header_f}/>}>
 
         </Route>
         <Route path='/eaitor' element={<Ace mode={props.mode} />} />
-        <Route path='/plug/css' element={<Css />} />
-        <Route path='/plug/js' element={<Js />} />
-        <Route path='/comment' element={<Comment />} />
+        <Route path='/plug/css' element={<Css header_f={props.header_f} />} />
+        <Route path='/plug/js' element={<Js header_f={props.header_f} />} />
+        <Route path='/comment' element={<Comment header_f={props.header_f}/>} />
         <Route path='/file' element={<File />} />
       </Routes>
 

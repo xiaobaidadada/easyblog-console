@@ -50,7 +50,7 @@ const 菜单 = [
   },
   {
     key: 'system',
-    label: '系统设置',
+    label: '设置',
     children: [{
       key: 'function',
       label: '账号'
@@ -67,7 +67,13 @@ const Loyout = () => {
   //状态设置
   //顶部导航栏设置
   const [bar, setBar] = useState("index");
-  const [mode, setMd] = useState("md");
+  const [mode, setMd] = useState({
+    mode:"markdown",
+    input:"输入文章标题"
+  });
+
+  
+
   /**
    * 菜单点击路由函数
    * @param {*} param0
@@ -89,10 +95,16 @@ const Loyout = () => {
 
   }
 
-  //操作头
+  //给头部提供函数
   function md_f(md_p){
-      setMd(md_p)
+    setMd(md_p)
   }
+
+  //给内容提供函数
+  function header_f(header){
+    setBar(header)
+  }
+
   return (
     <Layout>
       {/* <--顶部--> */}
@@ -139,7 +151,7 @@ const Loyout = () => {
               background: colorBgContainer,
             }}
           >
-            <RouteMain mode={mode} />
+            <RouteMain mode={mode} header_f={header_f} />
           </Content>
         </Layout>
       </Layout>
