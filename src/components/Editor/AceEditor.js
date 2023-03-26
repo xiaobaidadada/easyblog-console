@@ -36,8 +36,14 @@ export default class Ace extends React.Component {
     onChange(newValue) {
 
 
-        localStorage.setItem('edit', newValue);
-    
+        localStorage.setItem('md_context', newValue);
+        localStorage.setItem('edit',JSON.stringify( {
+            type: '',
+            mode: this.state.mode,
+            input: this.state.input,
+            context: newValue
+        }));
+        
     }
 
     //挂载渲染，用于加载内容，两个跳转界面设置内容
@@ -61,8 +67,10 @@ export default class Ace extends React.Component {
                 mode:edit.mode
             })
             // console.log(edit.mode)
+            //缓存用于别的组件交互
             localStorage.setItem('md_context', edit.context);
             localStorage.setItem('md_mode', edit.mode);
+            localStorage.setItem('md_input', edit.input);
         }
         
         //每次都设置为true；
@@ -85,7 +93,9 @@ export default class Ace extends React.Component {
                 mode:this.props.mode.mode
             })
             // console.log(2)
+            //缓存用于别的组件交互
             localStorage.setItem('md_mode', this.props.mode.mode);
+            localStorage.setItem('md_input',this.props.mode.input);
         }
 
       }
