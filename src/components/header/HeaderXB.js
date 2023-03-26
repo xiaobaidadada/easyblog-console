@@ -1,7 +1,8 @@
 import './header.css'
 import status from '../config/config.js'
 import { Button, Dropdown } from 'antd';
-import {asy_post_by_json}  from '../config/requests'
+import React, { useState } from 'react';
+import { asy_post_by_json } from '../config/requests'
 
 /**
  * 登录状态组件
@@ -28,10 +29,14 @@ function Update(yy) {
         </div>)
 }
 
-//保存发送函数
-function send_new(){
+
+
+//保存发送更新函数
+function send_update() {
 
 }
+
+
 
 //功能菜单
 const items = [
@@ -85,9 +90,20 @@ const items = [
 
 function Add(props) {
 
+
+    //判断标识 //1是文章 2：js首页插件 3：js博客插件 4：css首页插件 5：css博客插件
+    const [mm, setMm] = useState(1);
+
+    //保存发送函数
+    function send_new() {
+                
+    }
+
     //点击模式
     const add_f = ({ key }) => {
         // console.log(key)
+        //设置发送状态
+        setMm(key)
 
         if (key == 1) {
             //md_f是父组件给的函数
@@ -95,6 +111,7 @@ function Add(props) {
                 mode: "markdown",
                 input: "输入文章标题"
             })
+           
         } else if (key == 2 || key == 4) {
             props.md_f({
                 mode: "javascript",

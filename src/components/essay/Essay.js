@@ -65,6 +65,7 @@ function Essay(props) {
 
                 localStorage.setItem('edit',JSON.stringify( {
                     type: 'essay',
+                    mode: 'markdown',
                     input: title,
                     context: context
                 }));

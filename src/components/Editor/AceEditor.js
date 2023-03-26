@@ -36,12 +36,13 @@ export default class Ace extends React.Component {
     onChange(newValue) {
 
 
-        localStorage.setItem('md_context', newValue);
-
+        localStorage.setItem('edit', newValue);
+    
     }
 
     //挂载渲染，用于加载内容，两个跳转界面设置内容
     componentDidMount() {
+
        
         //设置是否设置提示框
         // if(this.props.mode.input !=null){
@@ -49,7 +50,7 @@ export default class Ace extends React.Component {
         //         input:this.props.mode.input 
         //     })
         // }
-
+          
         let v= localStorage.getItem('edit');
         if(v != null && v!= undefined){
             let edit = JSON.parse(v);
@@ -59,7 +60,7 @@ export default class Ace extends React.Component {
                 prevalue:edit.context,
                 mode:edit.mode
             })
-            console.log(edit.mode)
+            // console.log(edit.mode)
             localStorage.setItem('md_context', edit.context);
             localStorage.setItem('md_mode', edit.mode);
         }
@@ -92,8 +93,7 @@ export default class Ace extends React.Component {
     render() {
         return (
             <div>
-                编辑器模式：{this.state.mode}{this.state.input}
-                
+
                 { this.state.input !=null &&
 
                         <Input placeholder={this.state.input} defaultValue={this.state.input} />
@@ -111,7 +111,7 @@ export default class Ace extends React.Component {
                     width='100%'
                     value={this.state.prevalue}
                 />
-                
+                编辑器模式：{this.state.mode}
             </div>
         );
     }
