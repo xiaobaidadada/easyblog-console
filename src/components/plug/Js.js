@@ -21,6 +21,9 @@ import { Switch } from 'antd';
 import React, { useState, useEffect } from 'react';
 import asy_get from '../config/requests'
 import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from "react-router-dom";
+
+
 
 const { RangePicker } = DatePicker;
 const { Column, ColumnGroup } = Table;
@@ -30,7 +33,7 @@ const { Column, ColumnGroup } = Table;
 function Css(props) {
 
   // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-
+  const [md, header_f] = useOutletContext();
   /**
    * 分页变量 
    */
@@ -83,7 +86,7 @@ function Css(props) {
                 input: name,
                 context: context
             }));
-            props.header_f('update')
+            header_f('update')
             navigate("/eaitor")//路由跳转
         }
     });

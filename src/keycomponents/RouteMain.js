@@ -16,12 +16,12 @@ function RouteMain(props) {
   return (
     
       <Routes >
-        <Route path="/" element={<Login />}>
-        </Route>
-        <Route path='/main' element={<Main />}>
+        {/* <Route path="/" element={<Login />}>
+        </Route> */}
+        <Route path='main' element={<Main />}>
 
         </Route>
-        <Route path='/essay' element={<Essay header_f={props.header_f}/>}>
+        <Route path='essay' element={<Essay header_f={props.header_f}/>}>
 
         </Route>
         <Route path='/eaitor' element={<Ace mode={props.mode} />} />

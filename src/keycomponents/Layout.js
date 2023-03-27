@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './layout.css';
 import RouteMain from './RouteMain'
 import { useNavigate } from 'react-router-dom';
+import {  Outlet  } from "react-router-dom";
 import HeaderXB from '../components/header/HeaderXB'
 
 const { Header, Content, Sider } = Layout;
@@ -151,7 +152,7 @@ const Loyout = () => {
               background: colorBgContainer,
             }}
           >
-            <RouteMain mode={mode} header_f={header_f} />
+            <Outlet context={[mode,header_f]}  />
           </Content>
         </Layout>
       </Layout>

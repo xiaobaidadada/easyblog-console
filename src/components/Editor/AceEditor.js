@@ -6,9 +6,13 @@ import 'brace/mode/css';
 import 'brace/mode/markdown';
 import 'brace/theme/github';
 import { Input } from 'antd';
+import { useOutletContext } from "react-router-dom";
 
 
-export default class Ace extends React.Component {
+
+ class Ace_get_router extends React.Component {
+
+
 
     //true是挂载函数  fasle是更新函数，内部值，不需要更新到界面，不需要设置state
      if_mount = true;
@@ -125,4 +129,10 @@ export default class Ace extends React.Component {
             </div>
         );
     }
+}
+
+export default function Ace(){
+    const [md, header_f] = useOutletContext();
+
+    return (<Ace_get_router mode={md} header_f={header_f} />)
 }
