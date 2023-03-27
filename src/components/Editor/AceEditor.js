@@ -132,6 +132,7 @@ import { useOutletContext } from "react-router-dom";
 }
 
 export default function Ace(){
+    //为了使用这个东西传递子路由的变量 outlet
     const [md, header_f] = useOutletContext();
 
     return (<Ace_get_router mode={md} header_f={header_f} />)
