@@ -10,3 +10,10 @@
     align-items: center;
     flex-wrap: wrap;
 }
+
+.log_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
