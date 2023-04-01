@@ -70,7 +70,8 @@ const Loyout = () => {
   const [bar, setBar] = useState("index");
   const [mode, setMd] = useState({
     mode:"markdown",
-    input:"输入文章标题"
+    input:"输入文章标题",
+    type:'essay'
   });
 
   

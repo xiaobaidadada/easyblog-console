@@ -18,7 +18,7 @@ import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import React, { useState, useEffect } from 'react';
 import asy_get from '../config/requests'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useOutletContext} from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
 const { Column, ColumnGroup } = Table;
@@ -32,6 +32,9 @@ function Essay(props) {
     const [page, setPage] = useState(1);//默认是第一页的前面
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
+    const [md, header_f] = useOutletContext();
+
+
     const [dataSource, setDataSource] = useState([
         // {
         //   id: '1',
@@ -67,9 +70,13 @@ function Essay(props) {
                     type: 'essay',
                     mode: 'markdown',
                     input: title,
-                    context: context
+                    context: context,
                 }));
-                props.header_f('eaitor')
+                //用于修改的时候用
+                localStorage.setItem("data",JSON.stringify({
+                    id:id
+                }))
+                header_f('update')
                 navigate("/eaitor")//路由跳转
             }
         });

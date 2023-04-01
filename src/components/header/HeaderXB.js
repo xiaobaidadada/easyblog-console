@@ -1,8 +1,9 @@
 import './header.css'
-import status from '../config/config.js'
+import status, {edit_type} from '../config/config.js'
 import { Button, Dropdown } from 'antd';
 import React, { useState } from 'react';
 import { asy_post_by_json } from '../config/requests'
+import {useNavigate} from "react-router-dom";
 
 /**
  * 登录状态组件
@@ -16,16 +17,66 @@ function Out(yy) {
         </div>)
 }
 
+//保存发送按钮
+function update_data(navigate){
+    console.log(1)
+    let edit = localStorage.getItem('edit');
+    let data = localStorage.getItem("data");
+    data = JSON.parse(data)
+    edit = JSON.parse(edit);
+    if(edit.type === "essay"){
+       asy_post_by_json('essay/save','',{
+           id:data.id,
+           title:edit.input,
+           context:edit.context
+       },(data)=>{
+
+       },navigate)
+    }
+    else if(edit.type === edit_type.css_index.type || edit.type === edit_type.css_blog.type ){
+        asy_post_by_json('plug/css/save','',{
+            id:data.id,
+            name:edit.input,
+            context:edit.context,
+            on_off:data.on_off,
+            type:data.type
+        },(data)=>{
+
+        },navigate)
+    }
+    else if(edit.type === edit_type.js_blog.type || edit.type === edit_type.js_index.type){
+        asy_post_by_json('plug/js/save','',{
+            id:data.id,
+            name:edit.input,
+            context:edit.context,
+            on_off:data.on_off,
+            type:data.type
+        },(data)=>{
+
+        },navigate)
+    }
+    else if(edit.type === edit_type.comment.type){
+        asy_post_by_json('comment/update','',{
+            id:data.id,
+            context:edit.context,
+        },(data)=>{
+
+        },navigate)
+    }
+
+}
+
 /**
  * 编辑器修改状态组件
  * @param {显示保存js or css or 文章} yy
  * @returns
  */
 function Update(yy) {
+    const navigate = useNavigate();
     return (
         <div>
             <Button>取消</Button>
-            <Button>确定修改</Button>
+            <Button onClick={update_data(navigate)}>确定修改</Button>
         </div>)
 }
 
@@ -109,20 +160,50 @@ function Add(props) {
             //md_f是父组件给的函数
             props.md_f({
                 mode: "markdown",
-                input: "输入文章标题"
+                input: "输入文章标题",
+                type:'essay'
             })
+            let edit = localStorage.getItem('edit')
+            edit = JSON.parse(edit);
+            localStorage.setItem('edit', JSON.stringify({
+                type: 'essay',
+                mode: "markdown",
+                input: edit.name,
+                context: edit.context
+            }));
+
            
         } else if (key == 2 || key == 4) {
             props.md_f({
                 mode: "javascript",
-                input: "输入JS插件名字"
+                input: "输入JS插件名字",
+                type:key==2?'js_index':'js_blog'
             })
+
+            let edit = localStorage.getItem('edit')
+            edit = JSON.parse(edit);
+            localStorage.setItem('edit', JSON.stringify({
+                type: key==2?'js_index':'js_blog',
+                mode: "javascript",
+                input: edit.name,
+                context: edit.context
+            }));
         }
         else if (key == 3 || key == 5) {
             props.md_f({
                 mode: "css",
-                input: "输入CSS插件名字"
+                input: "输入CSS插件名字",
+                type:key==3?'css_index':'css_blog'
             })
+
+            let edit = localStorage.getItem('edit')
+            edit = JSON.parse(edit);
+            localStorage.setItem('edit', JSON.stringify({
+                type: key==3?'css_index':'css_blog',
+                mode: "javascript",
+                input: edit.name,
+                context: edit.context
+            }));
         }
     };
 

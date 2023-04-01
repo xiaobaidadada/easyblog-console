@@ -67,9 +67,9 @@ function Css(param) {
   });
 
   //编辑跳转
-  function to_edit(id) {
+  function to_edit(record,on_off) {
 
-    asy_get("plug/css/get", `id=${id}`, data => {
+    asy_get("plug/css/get", `id=${record.id}`, data => {
 
       if (data.code == "未知") alert("请求出错")
       else {
@@ -80,12 +80,18 @@ function Css(param) {
             console.log(rein)
 
         localStorage.setItem('edit', JSON.stringify({
-          type: 'comment',
+          type: type === 1?'css_index':'css_blog',
           mode: 'css',
           input: name,
-          context: context
+          context: context,
+          data_id:record.id
         }));
-
+        //用于修改的时候用
+        localStorage.setItem("data",JSON.stringify({
+          id:record.id,
+          on_off:record.on_off?0:1,
+          type:record.type
+        }))
         header_f('update')
         navigate("/eaitor")//路由跳转
       }
@@ -115,7 +121,8 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             id: v.id,
             name: v.name,
             time: v.time,
-            on_off: on_off
+            on_off: on_off,
+            type:v.type
           })
         }
         setDataSource(list)
@@ -252,7 +259,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             title="Action"
             render={(record) => (
               <Space size="middle">
-                <a onClick={(v) => { to_edit(record.id) }}>编辑 </a>
+                <a onClick={(v) => { to_edit(record) }}>编辑 </a>
                 <a>删除</a>
               </Space>
             )}

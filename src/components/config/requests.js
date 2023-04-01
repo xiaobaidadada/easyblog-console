@@ -1,5 +1,12 @@
 import status from './config'
+import {useNavigate} from "react-router-dom";
 
+/**
+ * get 请求
+ * @param path
+ * @param query
+ * @param handle
+ */
 function asy_get(path, query, handle) {
 
     let result = {
@@ -24,8 +31,15 @@ function asy_get(path, query, handle) {
 
 }
 
+/**
+ * post 请求
+ * @param path
+ * @param query
+ * @param object_data
+ * @param handle
+ */
+function asy_post_by_json(path, query, dict_data,handle,navigate) {
 
-function asy_post_by_json(path, query, object_data,handle) {
 
     let result = {
         code: "未知",
@@ -37,7 +51,7 @@ function asy_post_by_json(path, query, object_data,handle) {
         headers:{
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(object_data)
+        body: JSON.stringify(dict_data)
 
     }).then(response => response.json())
         .then(json_data => {
@@ -47,10 +61,21 @@ function asy_post_by_json(path, query, object_data,handle) {
                 result.code = "成功"
 
             }
+            else {
+                //跳转到登录
+                navigate("/login");
+            }
+            console.log(result.code )
             handle(result)
 
         });
 
 }
 
+
+
+
+
 export default asy_get;
+
+export {asy_post_by_json};

@@ -18,7 +18,7 @@ import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import React, { useState, useEffect } from 'react';
 import asy_get from '../config/requests'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useOutletContext} from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
 const { Column, ColumnGroup } = Table;
@@ -30,7 +30,7 @@ function Comment(props) {
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
     const navigate = useNavigate();
-
+    const [md, header_f] = useOutletContext();
 
     //数据源
     const [dataSource, setDataSource] = useState([
@@ -69,9 +69,14 @@ function Comment(props) {
                     type: 'comment',
                     mode:'txt',
                     input: null,
-                    context: context
+                    context: context,
+                    data_id:id
                 }));
-                props.header_f('update')
+
+                localStorage.setItem("data",JSON.stringify({
+                    id:id
+                }))
+                header_f('update')
                 navigate("/eaitor")//路由跳转
             }
         });
