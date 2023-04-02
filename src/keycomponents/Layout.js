@@ -53,8 +53,8 @@ const 菜单 = [
     key: 'system',
     label: '设置',
     children: [{
-      key: 'function',
-      label: '账号'
+      key: 'dict',
+      label: '字典管理'
     }]
   }
 ]

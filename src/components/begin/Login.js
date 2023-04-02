@@ -24,6 +24,7 @@ function Login() {
     const navigate = useNavigate();
     let username="", password="";
 
+
     /**
      * 登录函数
      */
@@ -36,8 +37,13 @@ function Login() {
             if(data.code == '成功'){
                 localStorage.setItem("Token",data.data)
                 navigate("/")
-                console.log('成功')
+
             }
+            else {
+                message.error('密码错误');
+                console.log(data)
+            }
+
 
         }, navigate)
     }

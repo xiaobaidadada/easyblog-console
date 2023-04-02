@@ -2,10 +2,10 @@ import './header.css'
 import status, {edit_type} from '../config/config.js'
 import { Button, Dropdown } from 'antd';
 import React, { useState } from 'react';
-import { asy_post_by_json ,asy_post_by_formData} from '../config/requests'
+import asy_get, { asy_post_by_json ,asy_post_by_formData} from '../config/requests'
 import {useNavigate} from "react-router-dom";
 import { UploadOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
+import { message, Upload,Select } from 'antd';
 
 /**
  * 登录状态组件
@@ -50,7 +50,7 @@ function update_data(navigate){
            context:edit.context
        },(data)=>{
            if(data.code == '成功'){
-               message.success('upload successfully.');
+               message.success('successfully.');
                // console.log('成功')
            }
        },navigate)
@@ -64,7 +64,7 @@ function update_data(navigate){
             type:data.type
         },(data)=>{
             if(data.code == '成功'){
-                message.success('upload successfully.');
+                message.success(' successfully.');
                 // console.log('成功')
             }
         },navigate)
@@ -78,7 +78,7 @@ function update_data(navigate){
             type:data.type
         },(data)=>{
             if(data.code == '成功'){
-                message.success('upload successfully.');
+                message.success(' successfully.');
                 // console.log('成功')
             }
         },navigate)
@@ -89,57 +89,7 @@ function update_data(navigate){
             context:edit.context,
         },(data)=>{
             if(data.code == '成功'){
-                message.success('upload successfully.');
-                // console.log('成功')
-            }
-        },navigate)
-    }
-
-}
-
-/**
- * 新建保存函数
- * @param navigate
- */
-function new_data(navigate){
-    let edit = localStorage.getItem('edit');
-    edit = JSON.parse(edit);
-    if(edit.type === "essay"){
-        asy_post_by_json('essay/save','',{
-            id:-1,
-            title:edit.input,
-            context:edit.context
-        },(data)=>{
-            if(data.code == '成功'){
-                message.success('upload successfully.');
-                // console.log('成功')
-            }
-        },navigate)
-    }
-    else if(edit.type === edit_type.css_index.type || edit.type === edit_type.css_blog.type ){
-        asy_post_by_json('plug/css/save','',{
-            id:-1,
-            name:edit.input,
-            context:edit.context,
-            on_off:1,
-            type:edit.type === edit_type.css_index.type?1:2
-        },(data)=>{
-            if(data.code == '成功'){
-                message.success('upload successfully.');
-                // console.log('成功')
-            }
-        },navigate)
-    }
-    else if(edit.type === edit_type.js_blog.type || edit.type === edit_type.js_index.type){
-        asy_post_by_json('plug/js/save','',{
-            id:-1,
-            name:edit.input,
-            context:edit.context,
-            on_off:1,//1是默认关闭
-            type:edit.type === edit_type.js_blog.type?2:1
-        },(data)=>{
-            if(data.code == '成功'){
-                message.success('upload successfully.');
+                message.success(' successfully.');
                 // console.log('成功')
             }
         },navigate)
@@ -221,8 +171,51 @@ function Add(props) {
 
     //判断标识 //1是文章 2：js首页插件 3：js博客插件 4：css首页插件 5：css博客插件
     const [mm, setMm] = useState(1);
+    const [essay_status, setEssayStatus] = useState(false);
+    const [essay_type,setEssaytype]=useState([
+        {
+            value: 0,
+            label: 'Jack',
+        },
+        // {
+        //     value: 'lucy',
+        //     label: 'Lucy',
+        // },
+        // {
+        //     value: 'Yiminghe',
+        //     label: 'yiminghe',
+        // },
+        // {
+        //     value: 'disabled',
+        //     label: 'Disabled',
+        //     disabled: true,
+        // },
+    ])
+    //全部类型，用这个做实时改变
+    let essay_type_0 = 0;
 
+    //获取全部文章类型
+    function get_essay_type(){
+        asy_get("essay/type", "", data => {
 
+            if (data.code == "未知") alert("请求出错")
+            else {
+                let rein = data.data;
+                let list = []
+                // console.log(rein)
+                for(let v in rein){
+                    // console.log(v)
+                    list.push({
+                        value: rein[v].id,
+                        label: rein[v].type_name,
+                    })
+                }
+                setEssaytype(list);
+                //设置一下默认值
+                essay_type_0 = 0;
+            }
+        },navigate);
+    }
 
     //点击模式
     const add_f = ({ key }) => {
@@ -245,8 +238,9 @@ function Add(props) {
                 input: edit.name,
                 context: edit.context
             }));
-
-           
+            //获取一下全部的文章
+            get_essay_type()
+           setEssayStatus(true)
         } else if (key == 2 || key == 4) {
             props.md_f({
                 mode: "javascript",
@@ -262,6 +256,8 @@ function Add(props) {
                 input: edit.name,
                 context: edit.context
             }));
+            //取消多余文章类型显示
+            setEssayStatus(false)
         }
         else if (key == 3 || key == 5) {
             props.md_f({
@@ -278,12 +274,87 @@ function Add(props) {
                 input: edit.name,
                 context: edit.context
             }));
+
+            //取消多余文章类型显示
+            setEssayStatus(false)
         }
     };
+
+
+    /**
+     * 新建保存函数
+     * @param navigate
+     */
+    function new_data(navigate){
+        let edit = localStorage.getItem('edit');
+        edit = JSON.parse(edit);
+        if(edit.type === "essay"){
+            asy_post_by_json('essay/save','',{
+                id:-1,
+                title:edit.input,
+                context:edit.context,
+                type:essay_type_0
+            },(data)=>{
+                if(data.code == '成功'){
+                    message.success(' successfully.');
+                    // console.log('成功')
+                }
+            },navigate)
+        }
+        else if(edit.type === edit_type.css_index.type || edit.type === edit_type.css_blog.type ){
+            asy_post_by_json('plug/css/save','',{
+                id:-1,
+                name:edit.input,
+                context:edit.context,
+                on_off:1,
+                type:edit.type === edit_type.css_index.type?1:2
+            },(data)=>{
+                if(data.code == '成功'){
+                    message.success(' successfully.');
+                    // console.log('成功')
+                }
+            },navigate)
+        }
+        else if(edit.type === edit_type.js_blog.type || edit.type === edit_type.js_index.type){
+            asy_post_by_json('plug/js/save','',{
+                id:-1,
+                name:edit.input,
+                context:edit.context,
+                on_off:1,//1是默认关闭
+                type:edit.type === edit_type.js_blog.type?2:1
+            },(data)=>{
+                if(data.code == '成功'){
+                    message.success(' successfully.');
+                    // console.log('成功')
+                }
+            },navigate)
+        }
+
+    }
+
+    //文章类型选择
+    const essay_type_change = (value) => {
+        essay_type_0 = value;
+        // console.log(`selected ${value}`);
+    };
+
 
     return (
         <div>
             {/* <button>取消</button> */}
+            {/*符号显示条件才会显示*/}
+            { essay_status &&
+                <Select
+                    defaultValue="lucy"
+                    style={{
+                        width: 120,
+                    }}
+                    onChange={essay_type_change}
+                    options={essay_type}
+                />
+            }
+
+
             <Dropdown
                 menu={{
                     items,
@@ -326,7 +397,7 @@ function File(yy) {
             // message.error('upload failed.');
             setUploading(false);
             if(data.code == '成功'){
-                message.success('upload successfully.');
+                message.success(' successfully.');
                 // console.log('成功')
             }
         },navigate)

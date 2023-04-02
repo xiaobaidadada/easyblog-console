@@ -96,7 +96,7 @@ export default function File(props) {
 
                     let rein = data.data;
                     setFile_info(rein)
-                    console.log(file_info)
+                    // console.log(file_info)
 
                 }
             },navigate);

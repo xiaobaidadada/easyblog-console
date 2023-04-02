@@ -15,6 +15,7 @@ import Css from './components/plug/css'
 import Js from './components/plug/Js'
 import Comment from './components/comment/comment'
 import File from './components/file/file'
+import Dict from './components/system/dict'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path='plug/js' element={<Js  />} />
           <Route path='comment' element={<Comment  />} />
           <Route path='file' element={<File />} />
+          <Route path='system/dict' element={<Dict />} />
         </Route>
       </Routes>
     </BrowserRouter>
