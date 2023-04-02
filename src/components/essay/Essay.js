@@ -134,7 +134,7 @@ function Essay(props) {
                 })
 
             }
-        });
+        },navigate);
 
         to_get(size, page);
 

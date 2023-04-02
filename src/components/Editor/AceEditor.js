@@ -80,7 +80,7 @@ class Ace_get_router extends React.Component {
         let v = localStorage.getItem('edit');
         if (v != null && v != undefined) {
             let edit = JSON.parse(v);
-            console.log(edit.mode + "这就是")
+            // console.log(edit.mode + "这就是")
             this.setState({
                 input: edit.input,
                 prevalue: edit.context,
@@ -88,6 +88,7 @@ class Ace_get_router extends React.Component {
                 type:edit.type
             })
             this.md_input=edit.input;
+            this.md_context=edit.context;
             // console.log(edit.mode)
             //缓存用于别的组件交互
             // localStorage.setItem('md_context', edit.context);
@@ -101,7 +102,7 @@ class Ace_get_router extends React.Component {
 
     //非跳转设置内容，两个组件在同一个界面的交互
     componentDidUpdate() {
-        console.log(this.if_mount)
+        // console.log(this.if_mount)
         if (this.if_mount) {
             //如果挂载函数不执行，这个就不执行；下面的就会执行；
             this.if_mount = false;

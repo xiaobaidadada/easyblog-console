@@ -2,8 +2,10 @@ import './header.css'
 import status, {edit_type} from '../config/config.js'
 import { Button, Dropdown } from 'antd';
 import React, { useState } from 'react';
-import { asy_post_by_json } from '../config/requests'
+import { asy_post_by_json ,asy_post_by_formData} from '../config/requests'
 import {useNavigate} from "react-router-dom";
+import { UploadOutlined } from '@ant-design/icons';
+import { message, Upload } from 'antd';
 
 /**
  * 登录状态组件
@@ -11,15 +13,32 @@ import {useNavigate} from "react-router-dom";
  * @returns
  */
 function Out(yy) {
+
+    const navigate = useNavigate();
+
+    function logout(){
+        asy_post_by_json('admin/logout', '', {
+        }, (data) => {
+            if(data.code == '成功'){
+                //token置空
+                localStorage.setItem("Token","")
+                navigate("/login")
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
+
+        }, navigate)
+    }
+
     return (
         <div>
-            <Button>退出登录</Button>
+            <Button  onClick={()=>{logout();}}>退出登录</Button>
         </div>)
 }
 
 //保存发送按钮
 function update_data(navigate){
-    console.log(1)
+    console.log('触发')
     let edit = localStorage.getItem('edit');
     let data = localStorage.getItem("data");
     data = JSON.parse(data)
@@ -30,7 +49,10 @@ function update_data(navigate){
            title:edit.input,
            context:edit.context
        },(data)=>{
-
+           if(data.code == '成功'){
+               message.success('upload successfully.');
+               // console.log('成功')
+           }
        },navigate)
     }
     else if(edit.type === edit_type.css_index.type || edit.type === edit_type.css_blog.type ){
@@ -41,7 +63,10 @@ function update_data(navigate){
             on_off:data.on_off,
             type:data.type
         },(data)=>{
-
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
         },navigate)
     }
     else if(edit.type === edit_type.js_blog.type || edit.type === edit_type.js_index.type){
@@ -52,7 +77,10 @@ function update_data(navigate){
             on_off:data.on_off,
             type:data.type
         },(data)=>{
-
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
         },navigate)
     }
     else if(edit.type === edit_type.comment.type){
@@ -60,7 +88,60 @@ function update_data(navigate){
             id:data.id,
             context:edit.context,
         },(data)=>{
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
+        },navigate)
+    }
 
+}
+
+/**
+ * 新建保存函数
+ * @param navigate
+ */
+function new_data(navigate){
+    let edit = localStorage.getItem('edit');
+    edit = JSON.parse(edit);
+    if(edit.type === "essay"){
+        asy_post_by_json('essay/save','',{
+            id:-1,
+            title:edit.input,
+            context:edit.context
+        },(data)=>{
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
+        },navigate)
+    }
+    else if(edit.type === edit_type.css_index.type || edit.type === edit_type.css_blog.type ){
+        asy_post_by_json('plug/css/save','',{
+            id:-1,
+            name:edit.input,
+            context:edit.context,
+            on_off:1,
+            type:edit.type === edit_type.css_index.type?1:2
+        },(data)=>{
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
+        },navigate)
+    }
+    else if(edit.type === edit_type.js_blog.type || edit.type === edit_type.js_index.type){
+        asy_post_by_json('plug/js/save','',{
+            id:-1,
+            name:edit.input,
+            context:edit.context,
+            on_off:1,//1是默认关闭
+            type:edit.type === edit_type.js_blog.type?2:1
+        },(data)=>{
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
         },navigate)
     }
 
@@ -76,16 +157,12 @@ function Update(yy) {
     return (
         <div>
             <Button>取消</Button>
-            <Button onClick={update_data(navigate)}>确定修改</Button>
+            <Button onClick={()=>{update_data(navigate)}}>确定修改</Button>
         </div>)
 }
 
 
 
-//保存发送更新函数
-function send_update() {
-
-}
 
 
 
@@ -140,15 +217,12 @@ const items = [
  */
 
 function Add(props) {
-
+    const navigate = useNavigate();
 
     //判断标识 //1是文章 2：js首页插件 3：js博客插件 4：css首页插件 5：css博客插件
     const [mm, setMm] = useState(1);
 
-    //保存发送函数
-    function send_new() {
-                
-    }
+
 
     //点击模式
     const add_f = ({ key }) => {
@@ -223,10 +297,65 @@ function Add(props) {
                 <Button  >模式</Button>
             </Dropdown>
 
-            <Button>保存</Button>
+            <Button  onClick={()=>{new_data(navigate)}}>保存</Button>
         </div>)
 }
 
+/**
+ * 登录状态组件
+ * @param {} yy
+ * @returns
+ */
+function File(yy) {
+    const [fileList, setFileList] = useState([]);
+    const [uploading, setUploading] = useState(false);
+    const navigate = useNavigate();
+
+    //上传文件函数
+    function handleUpload  ()  {
+        const formData = new FormData();
+        fileList.forEach((file) => {
+            formData.append('files', file);
+        });
+        setUploading(true);
+        asy_post_by_formData('file/upload_images','',{
+            body: formData,
+        },(data)=>{
+            setFileList([]);
+
+            // message.error('upload failed.');
+            setUploading(false);
+            if(data.code == '成功'){
+                message.success('upload successfully.');
+                // console.log('成功')
+            }
+        },navigate)
+
+    };
+    const props = {
+        onRemove: (file) => {
+            //点击删除文件，移除文件中的列表
+            const index = fileList.indexOf(file);
+            const newFileList = fileList.slice();
+            newFileList.splice(index, 1);
+            setFileList(newFileList);
+        },
+        beforeUpload: (file) => {
+            //选择的文件进行添加到这个文件列表
+            setFileList([...fileList, file]);
+            return false;
+        },
+        fileList,
+    };
+    return (
+        <div className="header_controll">
+            {/*{三个点在这里是正常把对象进行解析吧提取元素逐个赋值}*/}
+            <Upload {...props}>
+                <Button icon={<UploadOutlined />} >选择本地文件</Button>
+            </Upload>
+            <Button  onClick={handleUpload}>上传</Button>
+        </div>)
+}
 
 
 export default function HeaderXB(props) {
@@ -240,6 +369,9 @@ export default function HeaderXB(props) {
     }
     else if (header_type === "eaitor") {
         Ha = Add;
+    }
+    else if (header_type === "file") {
+        Ha = File;
     }
 
     return (

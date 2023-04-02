@@ -40,7 +40,7 @@ function Css(param) {
   const [page, setPage] = useState(1);//默认是第一页的前面
   const [size, setSize] = useState(5);
   const [total, setTotal] = useState(100);
-  const [type, setType] = useState(1);//1是插件首页，2是博客界面
+  let type = (1);//1是插件首页，2是博客界面
   const navigate = useNavigate();
 
   //数据源
@@ -135,7 +135,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
         setTotal(p.total);
 
       }
-    })
+    },navigate)
   }
 
   //获取信息
@@ -185,10 +185,10 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
     //checked true是首页 false 是博客
 
     if (checked) {
-      setType(1);//首页
+      type=(1);//首页
     }
     else {
-      setType(2);//博客
+      type=(2);//博客
     }
 
     setPage(1);

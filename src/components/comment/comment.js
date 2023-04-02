@@ -133,7 +133,7 @@ function Comment(props) {
                 })
         
             }
-        });
+        },navigate);
 
         // 首次请求列表数据
         to_get(size, page);

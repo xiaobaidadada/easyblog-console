@@ -40,7 +40,7 @@ function Css(props) {
   const [page, setPage] = useState(1);//默认是第一页的前面
   const [size, setSize] = useState(5);
   const [total, setTotal] = useState(100);
-  const [type, setType] = useState(1);//1是插件首页，2是博客界面
+  let type=1;//1是插件首页，2是博客界面
   const navigate = useNavigate();
 
   //数据源
@@ -134,7 +134,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
         setTotal(p.total);
 
       }
-    })
+    },navigate)
   }
 
   //获取信息
@@ -182,13 +182,14 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   //首页和博客切换
   const on_switch = (checked) => {
     //checked true是首页 false 是博客
-
+    console.log(type+"开始"+checked)
     if (checked) {
-      setType(1);//首页
+      type=1;//首页
     }
     else {
-      setType(2);//博客
+      type=2;//博客
     }
+      console.log(type+"结束")
 
     setPage(1);
     setSize(5);
@@ -233,7 +234,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
           </Col>
           <Col span={3}>
-            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={on_switch} />
+            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={(v)=>on_switch(v)} />
           </Col>
           <Col span={2}>
             <Button icon={<PlusOutlined />}>导入JS</Button>

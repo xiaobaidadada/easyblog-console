@@ -1,11 +1,13 @@
 
 #file{
     display: flex;
+    flex-wrap:wrap;
 }
 /*设置所有元素块大小*/
 .file_all_div{
     width: 20rem;
     height: 16rem;
+    overflow:hidden;
 }
 
 /* .file_file_div{

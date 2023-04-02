@@ -40,7 +40,7 @@ let edit_type={
 
 //获取编辑器编辑内容类型
 function get_edit_type(type){
-    console.log(type)
+    // console.log(type)
         if(type === edit_type.css_blog.type)
             return edit_type.css_blog.name
         else if(type === edit_type.css_index.type)

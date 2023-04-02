@@ -81,14 +81,17 @@ const Loyout = () => {
    * @param {*} param0
    */
   function menuControl({ item, key, keyPath, domEvent }) {
-    console.log(keyPath)
+
     rout = '';
     keyPath.forEach(element => {
       rout = element + '/' + rout;
     });
-
+    console.log(rout)
     if (rout === 'eaitor/') {
       setBar("eaitor")
+    }
+    else if(rout === 'file/'){
+      setBar("file")
     }
     else {
       setBar("index")
