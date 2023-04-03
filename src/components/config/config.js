@@ -35,6 +35,11 @@ let edit_type={
         name:"评论",
         type:"comment",
         mode:"txt"
+    },
+    blog_type:{
+        name:"博客类型",
+        type:"blog_type",
+        mode:"txt"
     }
 }
 
@@ -53,6 +58,9 @@ function get_edit_type(type){
             return edit_type.essay.name
         else if(type === edit_type.comment.type)
             return edit_type.comment.name
+        else if(type === edit_type.blog_type.type)
+            return edit_type.blog_type.name
+
 }
 
 

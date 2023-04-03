@@ -47,7 +47,8 @@ function update_data(navigate){
        asy_post_by_json('essay/save','',{
            id:data.id,
            title:edit.input,
-           context:edit.context
+           context:edit.context,
+           type_id:edit.type_id
        },(data)=>{
            if(data.code == '成功'){
                message.success('successfully.');
@@ -429,6 +430,47 @@ function File(yy) {
 }
 
 
+
+//保存发送按钮
+function add_blog_type(navigate){
+    console.log('触发')
+    let edit = localStorage.getItem('edit');
+    edit = JSON.parse(edit);
+
+        asy_post_by_json('essay/add_type','',{
+            // id:data.id,
+            // title:edit.input,
+            type_name:edit.context,
+            // type_id:edit.type_id
+        },(data)=>{
+            if(data.code == '成功'){
+                message.success('successfully.');
+                // console.log('成功')
+            }
+        },navigate)
+
+
+}
+
+
+
+
+
+/**
+ * 添加文章类型
+ * @param
+ * @returns
+ */
+function Add_blog_type(yy) {
+    const navigate = useNavigate();
+    return (
+        <div>
+            <Button>取消</Button>
+            <Button onClick={()=>{add_blog_type(navigate)}}>确认添加</Button>
+        </div>)
+}
+
+
 export default function HeaderXB(props) {
     let Ha;
     let header_type = props.header_type;
@@ -443,6 +485,9 @@ export default function HeaderXB(props) {
     }
     else if (header_type === "file") {
         Ha = File;
+    }
+    else if(header_type === "add_blog_type"){
+        Ha = Add_blog_type;
     }
 
     return (

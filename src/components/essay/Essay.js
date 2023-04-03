@@ -64,13 +64,14 @@ function Essay(props) {
 
                 let title = rein.title;
                 let context = rein.context;
-
+                let type_id = rein.type_id;
 
                 localStorage.setItem('edit',JSON.stringify( {
                     type: 'essay',
                     mode: 'markdown',
                     input: title,
                     context: context,
+                    type_id:type_id
                 }));
                 //用于修改的时候用
                 localStorage.setItem("data",JSON.stringify({
@@ -86,11 +87,12 @@ function Essay(props) {
 
 
     //请求数据
-    function to_get(e_size, e_page, title, id, time_begin, time_end) {
+    function to_get(e_size, e_page, title, id, blog_type_id,time_begin, time_end) {
 
         asy_get("essay/getP", `size=${e_size}&page=${e_page}
   ${title != undefined && title != "" && title != null ? "&title=" + title : ""}
-  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}`, data => {
+  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}
+  ${blog_type_id != undefined && blog_type_id != "" && blog_type_id != null ? "&blog_type_id=" + blog_type_id : ""}`, data => {
 
             if (data.code == "未知") alert("请求出错")
             else {
@@ -99,7 +101,7 @@ function Essay(props) {
                 let re_list = data.data.list;
                 for (let i = 0; i < re_list.length; i++) {
                     let v = re_list[i];
-                    console.log(v)
+                    // console.log(v)
                     list.push({
                         id: v.id,
                         title: v.title,
@@ -137,17 +139,63 @@ function Essay(props) {
         },navigate);
 
         to_get(size, page);
-
+        //加载所有文章
+        get_essay_type();
     }, []);// 仅在 []内变量  发生变化时，重新订阅
 
+    //文章类型
+    const [essay_type,setEssaytype]=useState([
+        {
+            value: 0,
+            label: 'Jack',
+        },
+        // {
+        //     value: 'lucy',
+        //     label: 'Lucy',
+        // },
+        // {
+        //     value: 'Yiminghe',
+        //     label: 'yiminghe',
+        // },
+        // {
+        //     value: 'disabled',
+        //     label: 'Disabled',
+        //     disabled: true,
+        // },
+    ])
+    //默认值，用于交互；
+    let essay_type_0 = 0;
 
     //搜索
     function search() {
         let id = document.getElementById("essay_id").value;
         let title = document.getElementById("essay_title").value;
-        to_get(5, 1, title, id);
+
+        to_get(5, page, title, id,essay_type_0);
     }
 
+    //获取全部文章类型
+    function get_essay_type(){
+        asy_get("essay/type", "", data => {
+
+            if (data.code == "未知") alert("请求出错")
+            else {
+                let rein = data.data;
+                let list = []
+                // console.log(rein)
+                for(let v in rein){
+                    // console.log(v)
+                    list.push({
+                        value: rein[v].id,
+                        label: rein[v].type_name,
+                    })
+                }
+                setEssaytype(list);
+                //设置一下默认值
+                essay_type_0 = 0;
+            }
+        },navigate);
+    }
 
     //下一页
     const onChange = (pageNumber) => {
@@ -156,6 +204,25 @@ function Essay(props) {
         let title = document.getElementById("essay_title").value;
         to_get(size, page, title, id);
     };
+
+    //文章类型选择
+    const essay_type_change = (value) => {
+        essay_type_0 = value;
+        // console.log(`selected ${value}`);
+    };
+
+    //添加博客类型
+    function add_blog_type(){
+        localStorage.setItem('edit',JSON.stringify( {
+            type: 'blog_type',
+            mode:'txt',
+            input: null,
+            context: null,
+        }));
+
+        header_f('add_blog_type')
+        navigate("/eaitor")//路由跳转
+    }
     return (
         <div>
             <Descriptions
@@ -182,18 +249,29 @@ function Essay(props) {
                     <Col span={5}>
                         <Input placeholder="id" id="essay_id" />
                     </Col>
-                    <Col span={6}>
+                    <Col span={4}>
                         <Input placeholder="标题" id="essay_title" />
                     </Col>
                     <Col span={6}>
                         <RangePicker picker="month" />
                     </Col>
-                    <Col span={3}>
-                        <Button icon={<SearchOutlined />} onClick={search}>搜索</Button>
-
+                    <Col span={2}>
+                        <Select
+                            defaultValue="lucy"
+                            style={{
+                                width: 120,
+                            }}
+                            onChange={essay_type_change}
+                            options={essay_type}
+                        />
                     </Col>
                     <Col span={2}>
-                        <Button icon={<PlusOutlined />}>导入md</Button>
+                        <Button icon={<SearchOutlined />} onClick={()=>search()}>搜索</Button>
+
+                    </Col>
+
+                    <Col span={2}>
+                        <Button icon={<PlusOutlined />}  onClick={()=>{add_blog_type()} }>添加博客类型</Button>
 
                     </Col>
                 </Row>
