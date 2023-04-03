@@ -1,4 +1,4 @@
-import { Descriptions } from 'antd';
+import {Descriptions, message} from 'antd';
 import { Divider } from 'antd';
 import {
     AutoComplete,
@@ -17,7 +17,7 @@ import {
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import React, { useState, useEffect } from 'react';
-import asy_get from '../config/requests'
+import asy_get, {asy_post_by_json} from '../config/requests'
 import {useNavigate, useOutletContext} from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
@@ -61,7 +61,7 @@ function Essay(props) {
             if (data.code == "未知") alert("请求出错")
             else {
                 let rein = data.data;
-
+                let id = data.id;
                 let title = rein.title;
                 let context = rein.context;
                 let type_id = rein.type_id;
@@ -71,7 +71,8 @@ function Essay(props) {
                     mode: 'markdown',
                     input: title,
                     context: context,
-                    type_id:type_id
+                    type_id:type_id,
+                    id :id
                 }));
                 //用于修改的时候用
                 localStorage.setItem("data",JSON.stringify({
@@ -83,6 +84,27 @@ function Essay(props) {
         });
 
 
+    }
+
+    //删除
+    function to_del(id){
+        asy_post_by_json("essay/del", `id=${id}`, null,data => {
+
+            if (data.code == "未知") alert("请求出错")
+            else {
+                if(data.code == '成功'){
+                    let list = [];
+                    for(let index in dataSource){
+
+                        if(dataSource[index].id != id){
+                            list.push(dataSource[index])
+                        }
+                    }
+                    setDataSource(list)
+                    message.success('设置成功');
+                }
+            }
+        });
     }
 
 
@@ -246,7 +268,7 @@ function Essay(props) {
 
             <div>
                 <Row gutter={26}>
-                    <Col span={5}>
+                    <Col span={2}>
                         <Input placeholder="id" id="essay_id" />
                     </Col>
                     <Col span={4}>
@@ -265,8 +287,9 @@ function Essay(props) {
                             options={essay_type}
                         />
                     </Col>
-                    <Col span={2}>
-                        <Button icon={<SearchOutlined />} onClick={()=>search()}>搜索</Button>
+                    <Col span={3}>
+
+                        <Button style={{"margin-left":"3em"}} icon={<SearchOutlined />} onClick={()=>search()}>搜索</Button>
 
                     </Col>
 
@@ -289,7 +312,7 @@ function Essay(props) {
                         render={( record) => (
                             <Space size="middle">
                                 <a onClick={(v)=>{to_edit(record.id)} }>编辑 </a>
-                                <a>删除</a>
+                                <a onClick={(v)=>{to_del(record.id)} }>删除</a>
                             </Space>
                         )}
 

@@ -1,4 +1,4 @@
-import { Descriptions } from 'antd';
+import {Descriptions, message} from 'antd';
 import { Divider } from 'antd';
 import {
     AutoComplete,
@@ -82,6 +82,27 @@ function Comment(props) {
         });
 
 
+    }
+
+    //删除
+    function to_del(id){
+        asy_get("comment/del", `id=${id}`, data => {
+
+            if (data.code == "未知") alert("请求出错")
+            else {
+                if(data.code == '成功'){
+                    let list = [];
+                    for(let index in dataSource){
+
+                        if(dataSource[index].id != id){
+                            list.push(dataSource[index])
+                        }
+                    }
+                    setDataSource(list)
+                    message.success('设置成功');
+                }
+            }
+        });
     }
 
     //请求数据
@@ -207,7 +228,7 @@ function Comment(props) {
                         render={(_, record) => (
                             <Space size="middle">
                                 <a  onClick={(v)=>{to_edit(record.id)} }>编辑 </a>
-                                <a>删除</a>
+                                <a  onClick={(v)=>{to_del(record.id)} } >删除</a>
                             </Space>
                         )}
                     />

@@ -1,5 +1,5 @@
 
-import { Descriptions } from 'antd';
+import {Descriptions, message} from 'antd';
 import { Divider } from 'antd';
 import {
   AutoComplete,
@@ -19,7 +19,7 @@ import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Pagination } from 'antd';
 import { Switch } from 'antd';
 import React, { useState, useEffect } from 'react';
-import asy_get from '../config/requests'
+import asy_get, {asy_post_by_json} from '../config/requests'
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from "react-router-dom";
 
@@ -177,7 +177,26 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   };
 
 
+    //删除
+    function to_del(id){
+        asy_post_by_json("js/del", `id=${id}`, null,data => {
 
+            if (data.code == "未知") alert("请求出错")
+            else {
+                if(data.code == '成功'){
+                    let list = [];
+                    for(let index in dataSource){
+
+                        if(dataSource[index].id != id){
+                            list.push(dataSource[index])
+                        }
+                    }
+                    setDataSource(list)
+                    message.success('设置成功');
+                }
+            }
+        });
+    }
 
   //首页和博客切换
   const on_switch = (checked) => {
@@ -260,7 +279,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 <a  onClick={(v)=>{to_edit(record)} }>编辑 </a>
-                <a>删除</a>
+                <a  onClick={(v)=>{to_del(record.id)} } >删除</a>
               </Space>
             )}
           />
