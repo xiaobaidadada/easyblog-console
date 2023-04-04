@@ -390,9 +390,11 @@ function File(yy) {
             formData.append('files', file);
         });
         setUploading(true);
-        asy_post_by_formData('file/upload_images','',{
-            body: formData,
-        },(data)=>{
+
+        let file_path = localStorage.getItem("file_path");
+        asy_post_by_formData('file/upload_images',`path=${file_path}`,
+            formData
+        ,(data)=>{
             setFileList([]);
 
             // message.error('upload failed.');
