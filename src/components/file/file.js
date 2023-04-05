@@ -4,7 +4,57 @@ import asy_get from "../config/requests";
 import {useEffect, useState} from "react";
 import status from "../config/config";
 import {useNavigate} from "react-router-dom";
-import {Image} from 'antd';
+import {Button, Image, Tooltip} from 'antd';
+
+
+
+
+
+/**
+ * 面包屑
+ * @constructor
+ */
+function Breadcrumb(props) {
+
+
+    //显示列表
+    let items = props.items;
+
+    //渲染出了一个元素外元素
+    function get_other_list() {
+        //删除第一个元素
+        let linshi_list = [];
+
+        for(let i = 1 ;i<items.length;i++){
+            linshi_list.push(items[i])
+        }
+        return linshi_list.map((linshi_list) => {
+            return (<span className={"bread_member"}
+                          onClick={() => hand(linshi_list.url)}> <RightOutlined/> {linshi_list.name} </span>)
+        });
+    }
+
+    //处理函数
+    function hand(url){
+
+        //处理另外的事件
+        props.hand(url);
+
+    }
+
+    return (
+        <div id={"bread"}>
+            {(items != null && items != undefined && items.length > 0) &&
+                <span className={"bread_member"} onClick={() => hand(items[0].url)}> <HomeOutlined/> </span>}
+            {
+                (items != null && items != undefined && items.length > 1) &&
+                get_other_list()
+            }
+
+        </div>
+    );
+}
+
 
 /**
  * 基础块组件
@@ -13,8 +63,33 @@ import {Image} from 'antd';
  */
 function Base_file(propos) {
 
+    const [file_base_css,setFile_base_css]= useState("file_base")
+
+    //点击样式
+    function set_click(){
+
+        if(propos.Left!==Folder_div){
+            let folder_path = localStorage.getItem("folder_path");
+
+            let file_paths = JSON.parse(localStorage.getItem("file_path") );
+
+
+            // eslint-disable-next-line no-unused-expressions
+            file_paths.push((folder_path!=null  && folder_path!=undefined && folder_path.length!=0)?folder_path+"/"+propos.name:propos.name);
+            // console.log(file_paths)
+
+            localStorage.setItem("file_path",JSON.stringify(file_paths))
+
+            setFile_base_css("file_base_opt")
+        }
+
+
+    }
+
+
+    //left 是一个模块
     return (
-        <div id={"file_base"}>
+        <div id={file_base_css} onClick={()=>{set_click()}} >
             <div id={"file_base_left"}>
                 {/*<Image*/}
 
@@ -25,6 +100,10 @@ function Base_file(propos) {
 
             <div id={"file_base_right"}>
                 {propos.name}
+                {
+                    <Tooltip title={status.host+propos.url}>
+                        <div className={"tip"}> <span>file-url</span></div>
+                    </Tooltip>}
             </div>
         </div>
     )
@@ -130,19 +209,9 @@ export default function File(props) {
         while (linshi.url !==url);
         bread_items.push(linshi);
 
-        //设置本地上传数据的的地址todo 点击新的文件夹不会触发
-        let file_name="";
-        console.log(bread_items)
-        for(let i in bread_items){
-            console.log(i)
-            if(i!=0){
-                file_name+=bread_items[i].name;
-            }
-        }
-        console.log(file_name)
-        localStorage.setItem("file_path",file_name);
+        set_folder_path();
 
-        setBread_hand(bread_items)
+        setBread_hand(bread_items);
     }
 
     //设置面包屑回调函数
@@ -151,6 +220,22 @@ export default function File(props) {
         linshi.push(dict)
         setBread_hand(linshi)
 
+    }
+
+    //设置本地上传数据的的地址 点击新的文件夹不会触发
+    function set_folder_path(){
+        //设置本地上传数据的的地址 点击新的文件夹不会触发
+        let file_name="";
+        // console.log(bread_items)
+        for(let i in bread_items){
+            // console.log(i)
+            if(i!=0){
+
+                file_name+=i==1?"":"/"+bread_items[i].name;
+            }
+        }
+        // console.log(file_name)
+        localStorage.setItem("folder_path",file_name);
     }
 
 
@@ -177,7 +262,10 @@ export default function File(props) {
                         })
                     }
 
-
+                    //设置文件目录
+                    set_folder_path();
+                    //清空文件选择
+                    localStorage.setItem("file_path",'[]')
 
                 }
             }, navigate);
@@ -195,6 +283,8 @@ export default function File(props) {
 
         //初始化本地上传地址
         localStorage.setItem("file_path","")
+        //初始化文件选择
+        localStorage.setItem("file_path","[]")
 
     }, []);// 仅在 []内变量  发生变化时，重新订阅
 
@@ -230,7 +320,7 @@ export default function File(props) {
                 left = <Folder_div set_bread={set_bread} name={item.name} url={item.url} getinfo={getinfo}/>;
             }
             //最终返回
-            return <Base_file Left={left} name={item.name}/>;
+            return <Base_file Left={left} name={item.name} url={item.url}/>;
 
         })
     }
@@ -251,47 +341,3 @@ export default function File(props) {
 }
 
 
-/**
- * 面包屑
- * @constructor
- */
-function Breadcrumb(props) {
-
-
-    //显示列表
-    let items = props.items;
-
-    //渲染出了一个元素外元素
-    function get_other_list() {
-        //删除第一个元素
-        let linshi_list = [];
-
-        for(let i = 1 ;i<items.length;i++){
-            linshi_list.push(items[i])
-        }
-        return linshi_list.map((linshi_list) => {
-            return (<span className={"bread_member"}
-                          onClick={() => hand(linshi_list.url)}> <RightOutlined/> {linshi_list.name} </span>)
-        });
-     }
-
-     //处理函数
-    function hand(url){
-
-        //处理另外的事件
-      props.hand(url);
-
-    }
-
-    return (
-        <div id={"bread"}>
-            {(items != null && items != undefined && items.length > 0) &&
-                <span className={"bread_member"} onClick={() => hand(items[0].url)}> <HomeOutlined/> </span>}
-            {
-                (items != null && items != undefined && items.length > 1) &&
-                get_other_list()
-            }
-
-        </div>
-    );
-}

@@ -29,10 +29,11 @@ const { Column, ColumnGroup } = Table;
 
 function Essay(props) {
     const navigate = useNavigate();
-    const [page, setPage] = useState(1);//默认是第一页的前面
+    let page=(1);//默认是第一页的前面
     const [size, setSize] = useState(5);
     const [total, setTotal] = useState(100);
     const [md, header_f] = useOutletContext();
+    let page_size = 5;
 
 
     const [dataSource, setDataSource] = useState([
@@ -110,11 +111,11 @@ function Essay(props) {
 
     //请求数据
     function to_get(e_size, e_page, title, id, blog_type_id,time_begin, time_end) {
+        let query = `size=${e_size}&page=${e_page}${title != undefined && title != "" && title != null ? "&title=" + title : ""}${id != undefined && id != "" && id != null ? "&id=" + id : ""}${blog_type_id != undefined && blog_type_id != "" && blog_type_id != null ? "&blog_type_id=" + blog_type_id : ""}`;
 
-        asy_get("essay/getP", `size=${e_size}&page=${e_page}
-  ${title != undefined && title != "" && title != null ? "&title=" + title : ""}
-  ${id != undefined && id != "" && id != null ? "&id=" + id : ""}
-  ${blog_type_id != undefined && blog_type_id != "" && blog_type_id != null ? "&blog_type_id=" + blog_type_id : ""}`, data => {
+
+
+        asy_get("essay/getP", query, data => {
 
             if (data.code == "未知") alert("请求出错")
             else {
@@ -127,16 +128,14 @@ function Essay(props) {
                     list.push({
                         id: v.id,
                         title: v.title,
-                        time: "00",
-                        type: v.type_id
+                        click: v.click,
+                        type: v.type
                     })
                 }
                 setDataSource(list)
 
                 //设置分页
                 let p = data.data;
-                console.log(p)
-                setPage(p.page);
                 setSize(p.size);
                 setTotal(p.total);
 
@@ -167,10 +166,10 @@ function Essay(props) {
 
     //文章类型
     const [essay_type,setEssaytype]=useState([
-        {
-            value: 0,
-            label: 'Jack',
-        },
+        // {
+        //     value: 0,
+        //     label: 'Jack',
+        // },
         // {
         //     value: 'lucy',
         //     label: 'Lucy',
@@ -193,7 +192,9 @@ function Essay(props) {
         let id = document.getElementById("essay_id").value;
         let title = document.getElementById("essay_title").value;
 
-        to_get(5, page, title, id,essay_type_0);
+        let p_page = page===1?page:(page-1)*page_size;
+        page = p_page;
+        to_get(5, p_page, title, id,essay_type_0);
     }
 
     //获取全部文章类型
@@ -220,11 +221,10 @@ function Essay(props) {
     }
 
     //下一页
-    const onChange = (pageNumber) => {
-        setPage(pageNumber)
-        let id = document.getElementById("essay_id").value;
-        let title = document.getElementById("essay_title").value;
-        to_get(size, page, title, id);
+    function next_page  (pageNumber) {
+
+        page = (pageNumber)
+        search();
     };
 
     //文章类型选择
@@ -275,11 +275,12 @@ function Essay(props) {
                         <Input placeholder="标题" id="essay_title" />
                     </Col>
                     <Col span={6}>
-                        <RangePicker picker="month" />
+                        {/*<RangePicker picker="month" />*/}
                     </Col>
                     <Col span={2}>
                         <Select
-                            defaultValue="lucy"
+                            // defaultValue="lucy"
+                            placeholder="博客类型"
                             style={{
                                 width: 120,
                             }}
@@ -304,7 +305,7 @@ function Essay(props) {
                 <Table dataSource={dataSource} pagination={false}>
                     <Column title="id" dataIndex="id" key="id" />
                     <Column title="标题" dataIndex="title" key="title" />
-                    <Column title="更新时间" dataIndex="time" key="time" />
+                    <Column title="点击次数" dataIndex="click" key="click" />
                     <Column title="文章类型" dataIndex="type" key="type" />
                     <Column
                         title="Action"
@@ -319,7 +320,7 @@ function Essay(props) {
                     />
                 </Table>
 
-                <Pagination defaultCurrent={page} total={total} onChange={onChange} />
+                <Pagination defaultCurrent={page} total={total} pageSize={page_size} onChange={next_page} />
             </div>
 
         </div>

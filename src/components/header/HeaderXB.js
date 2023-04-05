@@ -391,7 +391,7 @@ function File(yy) {
         });
         setUploading(true);
 
-        let file_path = localStorage.getItem("file_path");
+        let file_path = localStorage.getItem("folder_path");
         asy_post_by_formData('file/upload_images',`path=${file_path}`,
             formData
         ,(data)=>{
@@ -421,8 +421,35 @@ function File(yy) {
         },
         fileList,
     };
+
+
+
+
+    //删除文件
+    function file_del(){
+
+        let files = JSON.parse(localStorage.getItem("file_path") );
+
+        let body = [];
+        for(let i in files){
+            body.push({
+                url:files[i]
+            })
+        }
+
+        asy_post_by_json("file/del",null,body,(data)=>{
+                if(data.code == '成功'){
+                    message.success(' successfully.');
+                    // console.log('成功')
+                }
+            },
+            navigate);
+
+    }
+
     return (
         <div className="header_controll">
+            <Button  onClick={()=>{file_del()}}>删除</Button>
             {/*{三个点在这里是正常把对象进行解析吧提取元素逐个赋值}*/}
             <Upload {...props}>
                 <Button icon={<UploadOutlined />} >选择本地文件</Button>

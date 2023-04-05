@@ -3,6 +3,7 @@
 let status = {
     "if_login": true,//是否登录
     "host": "http://localhost:666/",//ip地址
+    // "host":window.document.location.origin+"/"
 };
 
 let edit_type={

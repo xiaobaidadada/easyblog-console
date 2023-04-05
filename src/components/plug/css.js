@@ -37,7 +37,7 @@ function Css(param) {
   /**
    * 分页变量 
    */
-  const [page, setPage] = useState(1);//默认是第一页的前面
+  let page= (1);//默认是第一页的前面
   const [size, setSize] = useState(5);
   const [total, setTotal] = useState(100);
   let type = (1);//1是插件首页，2是博客界面
@@ -113,10 +113,10 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
         //设置信息
         let list = []
         let re_list = data.data.list;
-        // todo 补充符合的代码
+
         for (let i = 0; i < re_list.length; i++) {
           let v = re_list[i];
-          let on_off = v.on_off == 1 ? true : false;
+          let on_off = v.on_off === 0 ? true : false;
           list.push({
             id: v.id,
             name: v.name,
@@ -129,8 +129,6 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
         //设置分页
         let p = data.data;
-        console.log(p)
-        setPage(p.page);
         setSize(p.size);
         setTotal(p.total);
 
@@ -168,18 +166,20 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   function search() {
     let id = document.getElementById("id").value;
     let name = document.getElementById("name").value;
+    let p_page = page===1?page:(page-1)*size;
+    page = p_page;
     to_get(size, page, type, name, id);
   }
 
   //下一页
   const onChange = (pageNumber) => {
-    setPage(pageNumber)
+    page = pageNumber;
     search();
   };
 
   //删除
   function to_del(id){
-    asy_post_by_json("css/del", `id=${id}`, null,data => {
+    asy_post_by_json("plug/css/del", `id=${id}`, null,data => {
 
       if (data.code == "未知") alert("请求出错")
       else {
@@ -195,7 +195,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
           message.success('设置成功');
         }
       }
-    });
+    },navigate);
   }
 
 
@@ -210,12 +210,29 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
       type=(2);//博客
     }
 
-    setPage(1);
     setSize(5);
     search();
     getinfo();
 
   };
+
+  //设置开启状态
+  function set_status(record){
+    console.log(record)
+    asy_post_by_json('plug/css/set_on_off','',{
+      id:record.id,
+      on_off:record.on_off===true?1:0,
+      type:record.type
+
+    },(data)=>{
+      if(data.code == '成功'){
+        message.success(' successfully.');
+        // console.log('成功')
+        search();
+        getinfo();
+      }
+    },navigate)
+  }
 
   return (
     <div>
@@ -246,17 +263,18 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             <Input placeholder="名称" id='name' />
           </Col>
           <Col span={6}>
-            <RangePicker picker="month" />
+            {/*<RangePicker picker="month" />*/}
           </Col>
           <Col span={3}>
             <Button icon={<SearchOutlined />} onClick={search} >搜索</Button>
 
           </Col>
           <Col span={3}>
-            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={on_switch} />
+            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={(checked)=>{
+              on_switch(checked); }} />
           </Col>
           <Col span={2}>
-            <Button icon={<PlusOutlined />}>导入css</Button>
+            {/*<Button icon={<PlusOutlined />}>导入css</Button>*/}
 
           </Col>
         </Row>
@@ -270,7 +288,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 {record.on_off}
-                <Switch defaultChecked={record.on_off} />
+                <Switch checked={record.on_off} pageSize={5} onChange={()=>set_status(record)} />
               </Space>
             )}
           />
@@ -284,7 +302,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             )}
           />
         </Table>
-        <Pagination defaultCurrent={page} total={total} onChange={onChange} />
+        <Pagination defaultCurrent={page} total={total} pageSize={size} onChange={onChange} />
       </div>
 
     </div>

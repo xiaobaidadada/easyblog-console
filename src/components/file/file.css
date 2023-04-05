@@ -18,6 +18,20 @@
     box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
 }
 
+#file_base_opt{
+    background: #e6f7ff;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    /*height: ;*/
+    width: calc(25% - 1em);
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.2em;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
+}
+
 #file_base_left{
     height: 4rem;
     width: 4rem;
@@ -33,4 +47,11 @@
 }
 .bread_member:hover{
     cursor:pointer;
+}
+
+.tip{
+    margin-top: 1rem;
+    background: #e6f4ff;
+    box-shadow: 0 0.3px 0 rgba(0,0,1,1);
+    width: 3rem;
 }

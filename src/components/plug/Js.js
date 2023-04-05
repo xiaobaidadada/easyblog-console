@@ -22,6 +22,7 @@ import React, { useState, useEffect } from 'react';
 import asy_get, {asy_post_by_json} from '../config/requests'
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from "react-router-dom";
+import {edit_type} from "../config/config";
 
 
 
@@ -30,14 +31,14 @@ const { Column, ColumnGroup } = Table;
 
 
 
-function Css(props) {
+function Js(props) {
 
   // const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [md, header_f] = useOutletContext();
   /**
    * 分页变量 
    */
-  const [page, setPage] = useState(1);//默认是第一页的前面
+ let page=1;//默认是第一页的前面
   const [size, setSize] = useState(5);
   const [total, setTotal] = useState(100);
   let type=1;//1是插件首页，2是博客界面
@@ -116,20 +117,19 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
         // todo 补充符合的代码
         for (let i = 0; i < re_list.length; i++) {
           let v = re_list[i];
-          let on_off = v.on_off == 1 ? true : false;
+          let on_off = v.on_off === 0 ? true : false;
           list.push({
             id: v.id,
             name: v.name,
             time: v.time,
-            on_off: on_off
+            on_off: on_off,
+              type:v.type
           })
         }
         setDataSource(list)
 
         //设置分页
         let p = data.data;
-        console.log(p)
-        setPage(p.page);
         setSize(p.size);
         setTotal(p.total);
 
@@ -167,19 +167,22 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   function search() {
     let id = document.getElementById("id").value;
     let name = document.getElementById("name").value;
-    to_get(size, page, type, name, id);
+      let p_page = page===1?page:(page-1)*size;
+      page = p_page;
+    to_get(size, p_page, type, name, id);
   }
 
   //下一页
-  const onChange = (pageNumber) => {
-    setPage(pageNumber)
+  function next_page  (pageNumber) {
+
+
+    page = pageNumber;
     search();
   };
 
-
     //删除
     function to_del(id){
-        asy_post_by_json("js/del", `id=${id}`, null,data => {
+        asy_post_by_json("plug/js/del", `id=${id}`, null,data => {
 
             if (data.code == "未知") alert("请求出错")
             else {
@@ -195,7 +198,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
                     message.success('设置成功');
                 }
             }
-        });
+        },navigate);
     }
 
   //首页和博客切换
@@ -210,12 +213,30 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
     }
       console.log(type+"结束")
 
-    setPage(1);
+    page = (1);
     setSize(5);
     search();
     getinfo();
 
   };
+
+    //设置开启状态
+    function set_status(record){
+        console.log(record)
+        asy_post_by_json('plug/js/set_on_off','',{
+            id:record.id,
+            on_off:record.on_off===true?1:0,
+            type:record.type
+
+        },(data)=>{
+            if(data.code == '成功'){
+                message.success(' successfully.');
+                // console.log('成功')
+                search();
+                getinfo();
+            }
+        },navigate)
+    }
 
   return (
     <div>
@@ -246,7 +267,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             <Input placeholder="名称" id='name' />
           </Col>
           <Col span={6}>
-            <RangePicker picker="month" />
+            {/*<RangePicker picker="month" />*/}
           </Col>
           <Col span={3}>
             <Button icon={<SearchOutlined />} onClick={search} >搜索</Button>
@@ -256,7 +277,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={(v)=>on_switch(v)} />
           </Col>
           <Col span={2}>
-            <Button icon={<PlusOutlined />}>导入JS</Button>
+            {/*<Button icon={<PlusOutlined />}>导入JS</Button>*/}
 
           </Col>
         </Row>
@@ -270,7 +291,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 {record.on_off}
-                <Switch defaultChecked={record.on_off} />
+                <Switch checked={record.on_off} onChange={()=>set_status(record)} />
               </Space>
             )}
           />
@@ -284,13 +305,13 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             )}
           />
         </Table>
-        <Pagination defaultCurrent={page} total={total} onChange={onChange} />
+        <Pagination defaultCurrent={page} total={total} pageSize={size} onChange={next_page} />
       </div>
 
     </div>
   );
 }
 
-export default Css;
+export default Js;
 
 

@@ -41,10 +41,10 @@ const 菜单 = [
     key: 'eaitor',
     label: '快速编辑'
   },
-  {
-    label: '评论管理',
-    key: 'comment'
-  },
+  // {//todo 暂时关闭
+  //   label: '评论管理',
+  //   key: 'comment'
+  // },
   {
     key: 'file',
     label: '文件'
