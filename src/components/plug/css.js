@@ -40,7 +40,9 @@ function Css(param) {
   let page= (1);//默认是第一页的前面
   const [size, setSize] = useState(5);
   const [total, setTotal] = useState(100);
-  let type = (1);//1是插件首页，2是博客界面
+  const [css_type, setCssType] = useState(1);
+//state 居然是异步更新的，会出现不及时的现象
+  // let type = (1);//1是插件首页，2是博客界面
   const navigate = useNavigate();
 
   //数据源
@@ -80,7 +82,7 @@ function Css(param) {
             console.log(rein)
 
         localStorage.setItem('edit', JSON.stringify({
-          type: type === 1?'css_index':'css_blog',
+          type: css_type === 1?'css_index':'css_blog',
           mode: 'css',
           input: name,
           context: context,
@@ -137,8 +139,8 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   }
 
   //获取信息
-  function getinfo() {
-    asy_get("plug/css/get_static", `type=${type}`, data => {
+  function getinfo(type) {
+    asy_get("plug/css/get_static", `type=${css_type}`, data => {
 
       if (data.code == "未知") alert("请求出错")
       else {
@@ -155,15 +157,15 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
   //组件挂载加载
   useEffect(() => {
-    getinfo();
+    getinfo(css_type);
 
     // 首次请求列表数据
-    to_get(size, page, type);
+    to_get(size, page, css_type);
 
   }, []);// 仅在 []内变量  发生变化时，重新订阅
 
   //搜索
-  function search() {
+  function search(type) {
     let id = document.getElementById("id").value;
     let name = document.getElementById("name").value;
     let p_page = page===1?page:(page-1)*size;
@@ -174,7 +176,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   //下一页
   const onChange = (pageNumber) => {
     page = pageNumber;
-    search();
+    search(css_type);
   };
 
   //删除
@@ -202,22 +204,37 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   //首页和博客切换
   const on_switch = (checked) => {
     //checked true是首页 false 是博客
-
+    setCssType(2)
+    setSize(5);
     if (checked) {
-      type=(1);//首页
+      // type=(1);//首页
+
+      search(1);
+      getinfo(1);
     }
     else {
-      type=(2);//博客
+      // type=(2);//博客
+
+      search(2);
+      getinfo(2);
     }
 
-    setSize(5);
-    search();
-    getinfo();
+
+
 
   };
 
   //设置开启状态
-  function set_status(record){
+  function set_status(b,record){
+    if (b) {
+      // type=(1);//首页
+      setCssType(1)
+    }
+    else {
+      // type=(2);//博客
+      setCssType(2)
+    }
+
     console.log(record)
     asy_post_by_json('plug/css/set_on_off','',{
       id:record.id,
@@ -228,9 +245,12 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
       if(data.code == '成功'){
         message.success(' successfully.');
         // console.log('成功')
-        search();
-        getinfo();
+
+      } else {
+        message.success(' 失败.');
       }
+      search(b===true?1:2);
+      getinfo(b===true?1:2);
     },navigate)
   }
 
@@ -266,11 +286,11 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             {/*<RangePicker picker="month" />*/}
           </Col>
           <Col span={3}>
-            <Button icon={<SearchOutlined />} onClick={search} >搜索</Button>
+            <Button icon={<SearchOutlined />} onClick={()=>{search(css_type)}} >搜索</Button>
 
           </Col>
           <Col span={3}>
-            <Switch defaultChecked={true} checkedChildren="首页" unCheckedChildren="博客" onChange={(checked)=>{
+            <Switch checked={css_type==1?true:false} checkedChildren="首页" unCheckedChildren="博客" onChange={(checked)=>{
               on_switch(checked); }} />
           </Col>
           <Col span={2}>
@@ -288,7 +308,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 {record.on_off}
-                <Switch checked={record.on_off} pageSize={5} onChange={()=>set_status(record)} />
+                <Switch defaultChecked={record.on_off} pageSize={5}  onChange={(b)=>set_status(b,record)} />
               </Space>
             )}
           />

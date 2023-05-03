@@ -23,7 +23,7 @@ function Out(yy) {
                 //token置空
                 localStorage.setItem("Token","")
                 navigate("/login")
-                message.success('upload successfully.');
+                message.success(' 退出成功.');
                 // console.log('成功')
             }
 
