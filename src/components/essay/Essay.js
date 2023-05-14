@@ -62,7 +62,7 @@ function Essay(props) {
             if (data.code == "未知") alert("请求出错")
             else {
                 let rein = data.data;
-                let id = data.id;
+                let id = rein.id;
                 let title = rein.title;
                 let context = rein.context;
                 let type_id = rein.type_id;
