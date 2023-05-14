@@ -118,7 +118,10 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
         for (let i = 0; i < re_list.length; i++) {
           let v = re_list[i];
-          let on_off = v.on_off === 0 ? true : false;
+          let on_off = v.on_off == 0 ? true : false;
+          // console.log(v.on_off)
+          // console.log(on_off)
+          // console.log(name)
           list.push({
             id: v.id,
             name: v.name,
@@ -204,19 +207,21 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
   //首页和博客切换
   const on_switch = (checked) => {
     //checked true是首页 false 是博客
-    setCssType(2)
+
     setSize(5);
     if (checked) {
       // type=(1);//首页
 
       search(1);
       getinfo(1);
+      setCssType(1)
     }
     else {
       // type=(2);//博客
 
       search(2);
       getinfo(2);
+      setCssType(2)
     }
 
 
@@ -226,16 +231,16 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
   //设置开启状态
   function set_status(b,record){
-    if (b) {
-      // type=(1);//首页
-      setCssType(1)
-    }
-    else {
-      // type=(2);//博客
-      setCssType(2)
-    }
+    // if (b) {
+    //   // type=(1);//首页
+    //   setCssType(1)
+    // }
+    // else {
+    //   // type=(2);//博客
+    //   setCssType(2)
+    // }
 
-    console.log(record)
+    // console.log(record)
     asy_post_by_json('plug/css/set_on_off','',{
       id:record.id,
       on_off:record.on_off===true?1:0,
@@ -249,8 +254,8 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
       } else {
         message.success(' 失败.');
       }
-      search(b===true?1:2);
-      getinfo(b===true?1:2);
+      search(css_type);
+      getinfo(css_type);
     },navigate)
   }
 
@@ -308,7 +313,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 {record.on_off}
-                <Switch defaultChecked={record.on_off} pageSize={5}  onChange={(b)=>set_status(b,record)} />
+                <Switch checked={record.on_off} pageSize={5}  onChange={(b)=>set_status(b,record)} />
               </Space>
             )}
           />

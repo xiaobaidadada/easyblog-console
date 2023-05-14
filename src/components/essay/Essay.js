@@ -261,7 +261,7 @@ function Essay(props) {
             >
                 <Descriptions.Item label="文章总数量">{info.essay_total}</Descriptions.Item>
                 <Descriptions.Item label="最高浏览量文章">{info.max_click}</Descriptions.Item>
-                <Descriptions.Item label="最高浏览量文章">{info.essay_look_click}</Descriptions.Item>
+                <Descriptions.Item label="文章浏览总量">{info.essay_look_click}</Descriptions.Item>
 
             </Descriptions>
             <Divider>*</Divider>

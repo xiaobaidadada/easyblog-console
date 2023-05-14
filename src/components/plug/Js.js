@@ -216,6 +216,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
         setSize(5);
         search(1);
         getinfo(1);
+        set_js_type(1)
     }
     else {
       // type=2;//博客
@@ -232,7 +233,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
     //设置开启状态
     function set_status(b,record){
-        console.log(record)
+        // console.log(record)
         asy_post_by_json('plug/js/set_on_off','',{
             id:record.id,
             on_off:record.on_off===true?1:0,
@@ -287,7 +288,8 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
 
           </Col>
           <Col span={3}>
-            <Switch defaultChecked={js_type==1?true:false} checkedChildren="首页" unCheckedChildren="博客" onChange={(v)=>on_switch(v)} />
+
+            <Switch checked={js_type==1?true:false} checkedChildren="首页" unCheckedChildren="博客" onChange={(v)=>on_switch(v)} />
           </Col>
           <Col span={2}>
             {/*<Button icon={<PlusOutlined />}>导入JS</Button>*/}
@@ -304,7 +306,7 @@ ${type != undefined && type != "" && type != null ? "&type=" + type : ""}`, data
             render={(record) => (
               <Space size="middle">
                 {record.on_off}
-                <Switch defaultChecked={record.on_off} onChange={(b)=>set_status(b,record)} />
+                <Switch checked={record.on_off} onChange={(b)=>set_status(b,record)} />
               </Space>
             )}
           />
