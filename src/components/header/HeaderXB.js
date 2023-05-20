@@ -294,7 +294,7 @@ function Add(props) {
                 id:-1,
                 title:edit.input,
                 context:edit.context,
-                type:essay_type_0
+                type_id:essay_type_0
             },(data)=>{
                 if(data.code == '成功'){
                     message.success(' successfully.');
