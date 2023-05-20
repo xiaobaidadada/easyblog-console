@@ -116,10 +116,10 @@ function Base_file(propos) {
  */
 function Image_div(ww) {
     return (
-        <div>
+        <div >
 
             <Image
-
+                width={50}
                 src={status.host + ww.url}
             />
             {/*<img src= className='file_image_div'/>*/}
@@ -212,6 +212,7 @@ export default function File(props) {
         set_folder_path();
 
         setBread_hand(bread_items);
+        // localStorage.setItem("file_path",url)
     }
 
     //设置面包屑回调函数
@@ -226,15 +227,16 @@ export default function File(props) {
     function set_folder_path(){
         //设置本地上传数据的的地址 点击新的文件夹不会触发
         let file_name="";
-        // console.log(bread_items)
-        for(let i in bread_items){
-            // console.log(i)
-            if(i!=0){
-
-                file_name+=i==1?"":"/"+bread_items[i].name;
-            }
+        console.log(bread_items)
+        for(let index = 0;index < bread_items.length ;index ++){
+            file_name+=bread_items[index].name+"/";
         }
-        // console.log(file_name)
+        if(bread_items.length>0){
+            // 删除最后一个 / 符号
+            file_name=file_name.slice(0,file_name.length-1)
+            console.log('删除')
+        }
+        console.log(file_name+"名字")
         localStorage.setItem("folder_path",file_name);
     }
 
