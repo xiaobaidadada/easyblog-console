@@ -28,6 +28,7 @@ function Breadcrumb(props) {
         for(let i = 1 ;i<items.length;i++){
             linshi_list.push(items[i])
         }
+
         return linshi_list.map((linshi_list) => {
             return (<span className={"bread_member"}
                           onClick={() => hand(linshi_list.url)}> <RightOutlined/> {linshi_list.name} </span>)
@@ -200,7 +201,7 @@ export default function File(props) {
     function bread_hand(url) {
 
 
-        getinfo(null,url,null);
+
 
 
         //删除元素
@@ -210,6 +211,8 @@ export default function File(props) {
         bread_items.push(linshi);
 
         set_folder_path();
+
+        getinfo(null,url,null);
 
         setBread_hand(bread_items);
         // localStorage.setItem("file_path",url)
@@ -234,9 +237,9 @@ export default function File(props) {
         if(bread_items.length>0){
             // 删除最后一个 / 符号
             file_name=file_name.slice(0,file_name.length-1)
-            console.log('删除')
+            // console.log('删除')
         }
-        console.log(file_name+"名字")
+        // console.log(file_name+"名字")
         localStorage.setItem("folder_path",file_name);
     }
 
