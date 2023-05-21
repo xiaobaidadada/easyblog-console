@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import asy_get, { asy_post_by_json ,asy_post_by_formData} from '../config/requests'
 import {useNavigate} from "react-router-dom";
 import { UploadOutlined } from '@ant-design/icons';
-import { message, Upload,Select } from 'antd';
+import { message, Upload,Select,Drawer ,Input} from 'antd';
 
 /**
  * 登录状态组件
@@ -447,8 +447,45 @@ function File(yy) {
 
     }
 
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
+
+    function new_folder(){
+        let file_path = localStorage.getItem("folder_path");
+        let folder_name = document.getElementById("folder_new_name").value;
+        let body = {
+            name:folder_name,
+            url:file_path
+        }
+        asy_post_by_json("file/new",null,body,(data)=>{
+                if(data.code == '成功'){
+                    message.success(' successfully.');
+                    // console.log('成功')
+                    setOpen(false);
+                }else {
+                    message.error('请求失败');
+                    // console.log(data)
+                }
+            },
+            navigate);
+    }
+
     return (
         <div className="header_controll">
+            <Button  onClick={showDrawer}>
+                新建文件夹
+            </Button>
+            <Drawer title="新建文件夹" placement="right" onClose={onClose} open={open}>
+                <Input placeholder="文件夹名字" id="folder_new_name"/>
+                <Button  onClick={()=>{new_folder()}} >确定</Button>
+            </Drawer>
             <Button  onClick={()=>{file_del()}}>删除</Button>
             {/*{三个点在这里是正常把对象进行解析吧提取元素逐个赋值}*/}
             <Upload {...props}>
